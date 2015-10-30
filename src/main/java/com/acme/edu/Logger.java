@@ -1,14 +1,18 @@
 package com.acme.edu;
 
 public class Logger {
-    private static final String PRIMITIVE_FORMAT   = "primitive: %s";
-    private static final String CHAR_FORMAT        = "char: %s";
-    private static final String STRING_FORMAT      = "string: %s";
-    private static final String REFERENCE_FORMAT   = "reference: %s";
+    private static final String PRIMITIVE_FORMAT     = "primitive: %s";
+    private static final String CHAR_FORMAT          = "char: %s";
+    private static final String STRING_FORMAT        = "string: %s";
+    private static final String REFERENCE_FORMAT     = "reference: %s";
+    private static final String STRING_FORMAT_REPEAT = "string: %s (x%s)";
 
     private static int        summ = 0;     //хранит сумму
     private static boolean isPrint = false; //флаг, что нужно сбросить
     private static boolean isSmt   = false; // флаг, что в сумме что-то есть для сброса
+
+    private static String prevStr = ""; //хранит предыдущую строку для сравнения
+    private static int strCount = 0;   // счетчик количества повторяемых строк
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа int. В случае последоваельно вызванных методов,
@@ -16,17 +20,18 @@ public class Logger {
      * @param message - параметр типа int
      */
     public static void log(int message) {
+        closeStr();
         if (Logger.isPrint && Logger.isSmt) {
             print(PRIMITIVE_FORMAT, Integer.toString(message));
             Logger.summ = 0;
             return;
         }
         if(isIntOverFlow(message)) {
-            close();
+            closeInt();
         }
         Logger.summ += message;
-        if(!isSmt)
-            isSmt = true;
+        if(!Logger.isSmt)
+            Logger.isSmt = true;
     }
 
     /**
@@ -62,10 +67,25 @@ public class Logger {
      * значение переменной типа String
      * @param message - параметр типа String
      */
-    public static void log(String message) {
-        close();
-        print(STRING_FORMAT, message);
-    }
+    /*public static void log(String message) {
+        closeInt();
+        if(!message.equals(Logger.prevStr)) {
+            if(Logger.strCount > 1) {
+                print(STRING_FORMAT_REPEAT, Logger.prevStr,
+                        Integer.toString(Logger.strCount));
+                Logger.strCount = 1;
+                Logger.prevStr = message;
+            }
+            else {
+                print(STRING_FORMAT, Logger.prevStr);
+                Logger.strCount = 1;
+                Logger.prevStr = message;
+            }
+            return;
+        }
+        Logger.strCount++;
+
+    }*/
 
     /**
      * Выводит в консоль метод toString() объекта,
@@ -82,11 +102,19 @@ public class Logger {
      * последовательность вводимых int
      */
     public static void close() {
-        Logger.isPrint = true;
-        log(Logger.summ);
+        closeInt();
+        closeStr();
+    }
+    private static void closeInt() {
+        print(PRIMITIVE_FORMAT, Integer.toString(Logger.summ));
         //обнуляем флаги
         Logger.isPrint = false;
         Logger.isSmt   = false;
+    }
+    private static void closeStr() {
+        if(Logger.strCount == 0)
+            return;
+        if()
     }
 
     /**
@@ -94,7 +122,7 @@ public class Logger {
      * @param format - шаблон строки для вывода
      * @param arg    - аргумент шаблона
      */
-    private static void print(String format, String arg) {
+    private static void print(String format, String... arg) {
         System.out.println(String.format(format, arg));
     }
 
