@@ -2,6 +2,7 @@ package com.acme.edu.iteration01;
 
 import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +14,11 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     public void setUpSystemOut() throws IOException {
         captureSysout();
     }
+
+    @After
+    public void tearDown() {
+    resetOut();
+    }
     //endregion
 
     @Test
@@ -21,11 +27,12 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         Logger.log(1);
         Logger.log(0);
         Logger.log(-1);
+        Logger.close();
         //endregion
 
         //region then
         assertSysoutContains("primitive: ");
-        assertSysoutEquals("primitive: 1\nprimitive: 0\nprimitive: -1\n");
+        assertSysoutEquals("primitive: 0\n");
         //endregion
     }
 
@@ -35,13 +42,14 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         Logger.log((byte) 1);
         Logger.log((byte)0);
         Logger.log((byte)-1);
+        Logger.close();
         //endregion
 
         //region then
         assertSysoutContains("primitive: ");
-        assertSysoutContains("1");
+        //assertSysoutContains("1");
         assertSysoutContains("0");
-        assertSysoutContains("-1");
+        //assertSysoutContains("-1");
         //endregion
     }
 
@@ -53,6 +61,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         //region when
         Logger.log('a');
         Logger.log('b');
+        Logger.close();
         //endregion
 
         //region then
@@ -67,6 +76,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         //region when
         Logger.log("test string 1");
         Logger.log("other str");
+        Logger.close();
         //endregion
 
         //region then
@@ -81,6 +91,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         //region when
         Logger.log(true);
         Logger.log(false);
+        Logger.close();
         //endregion
 
         //region then
@@ -94,6 +105,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     public void shouldLogReference() throws IOException {
         //region when
         Logger.log(new Object());
+        Logger.close();
         //endregion
 
         //region then
@@ -102,5 +114,5 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         //endregion
     }
 
-    
+
 }
