@@ -1,8 +1,10 @@
 package com.acme.edu.iteration02;
 
+import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 
@@ -23,7 +25,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
     //TODO: implement Logger solution to match specification as tests
 
-   /* @Test
+    @Test
     public void shouldLogSequentIntegersAsSum() throws IOException {
         //region when
         Logger.log("str 1");
@@ -95,7 +97,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         Logger.log("str 1");
         Logger.log("str 2");
         Logger.log("str 2");
-        //Logger.log(0);
+        Logger.log(0);
         Logger.log("str 2");
         Logger.log("str 3");
         Logger.log("str 3");
@@ -107,12 +109,12 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         assertSysoutEquals(
             "string: str 1\n" +
             "string: str 2 (x2)\n" +
-            //"primitive: 0\n" +
+            "primitive: 0\n" +
             "string: str 2\n" +
             "string: str 3 (x3)\n"
         );
         //endregion
     }
-*/
+
 
 }

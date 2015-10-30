@@ -7,12 +7,11 @@ public class Logger {
     private static final String REFERENCE_FORMAT     = "reference: %s";
     private static final String STRING_FORMAT_REPEAT = "string: %s (x%s)";
 
-    private static int        summ = 0;     //хранит сумму
-    private static boolean isPrint = false; //флаг, что нужно сбросить
-    private static boolean isSmt   = false; // флаг, что в сумме что-то есть для сброса
+    private static int        summ                   = 0;     //хранит сумму
+    private static boolean isSumm                    = false; // флаг, что в сумме что-то есть для сброса
 
-    private static String prevStr = ""; //хранит предыдущую строку для сравнения
-    private static int strCount = 0;   // счетчик количества повторяемых строк
+    private static String prevStr                    = ""; //хранит предыдущую строку для сравнения
+    private static int strCount                      = 0;   // счетчик количества повторяемых строк
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа int. В случае последоваельно вызванных методов,
@@ -21,17 +20,12 @@ public class Logger {
      */
     public static void log(int message) {
         closeStr();
-        if (Logger.isPrint && Logger.isSmt) {
-            print(PRIMITIVE_FORMAT, Integer.toString(message));
-            Logger.summ = 0;
-            return;
-        }
         if(isIntOverFlow(message)) {
             closeInt();
         }
         Logger.summ += message;
-        if(!Logger.isSmt)
-            Logger.isSmt = true;
+        if(!Logger.isSumm)
+            Logger.isSumm = true;
     }
 
     /**
@@ -40,6 +34,7 @@ public class Logger {
      * @param message - параметр типа byte
      */
     public static void log(byte message) {
+        closeStr();
         print(PRIMITIVE_FORMAT, Integer.toString(message));
     }
 
@@ -67,25 +62,18 @@ public class Logger {
      * значение переменной типа String
      * @param message - параметр типа String
      */
-    /*public static void log(String message) {
+    public static void log(String message) {
         closeInt();
-        if(!message.equals(Logger.prevStr)) {
-            if(Logger.strCount > 1) {
-                print(STRING_FORMAT_REPEAT, Logger.prevStr,
-                        Integer.toString(Logger.strCount));
-                Logger.strCount = 1;
-                Logger.prevStr = message;
-            }
-            else {
-                print(STRING_FORMAT, Logger.prevStr);
-                Logger.strCount = 1;
-                Logger.prevStr = message;
-            }
-            return;
+        if(message.equals(Logger.prevStr)) {
+            Logger.strCount++;
         }
-        Logger.strCount++;
-
-    }*/
+        else if(Logger.strCount != 0) {
+            closeStr();
+            strFirstSet(message);
+        } else {
+            strFirstSet(message);
+        }
+    }
 
     /**
      * Выводит в консоль метод toString() объекта,
@@ -98,23 +86,53 @@ public class Logger {
 
     /**
      * Необходимо вызвать явно по завершению вызовов методов log()
-     * Вызываеся неявно в log(String) методe, т.к. он неявно завершает
-     * последовательность вводимых int
      */
     public static void close() {
         closeInt();
         closeStr();
     }
+
+    /**
+     *вызывается для сброса в консоль суммы int
+     */
     private static void closeInt() {
-        print(PRIMITIVE_FORMAT, Integer.toString(Logger.summ));
-        //обнуляем флаги
-        Logger.isPrint = false;
-        Logger.isSmt   = false;
+       if(Logger.isSumm) {
+           print(PRIMITIVE_FORMAT, Integer.toString(Logger.summ));
+           Logger.isSumm = false;
+           Logger.summ = 0;
+       }
     }
+
+    /**
+     *вызывается для сброса в консоль string(с числом повторений)
+     */
     private static void closeStr() {
-        if(Logger.strCount == 0)
+        if(Logger.strCount == 0) //нечего выводить
             return;
-        if()
+        if(Logger.strCount == 1) {
+            print(STRING_FORMAT, Logger.prevStr);
+            strReset();
+        } else {
+            print(STRING_FORMAT_REPEAT, Logger.prevStr, Integer.toString(Logger.strCount));
+            strReset();
+        }
+    }
+
+    /**
+     * обнуляет счетчик числа string
+     */
+    private static void strReset() {
+        Logger.strCount = 0;
+        Logger.prevStr = "";
+    }
+
+    /**
+     * устанавливает strCount= 1 и prevStr = message
+     * @param message
+     */
+    private static void strFirstSet(String message) {
+        Logger.strCount = 1;
+        Logger.prevStr = message;
     }
 
     /**
