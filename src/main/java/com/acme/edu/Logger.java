@@ -21,17 +21,20 @@ public class Logger {
             Logger.summ = 0;
             return;
         }
-        summ += message;
+        if(isIntOverFlow(message)) {
+            close();
+        }
+        Logger.summ += message;
         if(!isSmt)
             isSmt = true;
     }
+
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа char
      * @param message -  параметр типа char
      */
     public static void log(char message) {
-        close();
         print(CHAR_FORMAT, Character.toString(message));
     }
 
@@ -41,7 +44,6 @@ public class Logger {
      * @param message - параметр типа boolean
      */
     public static void log(boolean message) {
-        close();
         print(PRIMITIVE_FORMAT, Boolean.toString(message));
     }
 
@@ -61,12 +63,13 @@ public class Logger {
      * @param message - параметр типа Object
      */
     public static void log(Object message) {
-        close();
         print(REFERENCE_FORMAT, message.toString());
     }
 
     /**
-     * Необходимо вызвать по завершению вызовов методов log()
+     * Необходимо вызвать явно по завершению вызовов методов log()
+     * Вызываеся неявно в log(String) методe, т.к. он неявно завершает
+     * последовательность вводимых int
      */
     public static void close() {
         Logger.isPrint = true;
@@ -75,6 +78,7 @@ public class Logger {
         Logger.isPrint = false;
         Logger.isSmt   = false;
     }
+
     /**
      *
      * @param format - шаблон строки для вывода
@@ -82,5 +86,15 @@ public class Logger {
      */
     private static void print(String format, String arg) {
         System.out.println(String.format(format, arg));
+    }
+
+    /**
+     * метод проверяет выход за границы int
+     * @param message
+     * @return возвращает true, если имеем выход за границы int
+     */
+    private static boolean isIntOverFlow(int message) {
+        return (((long)Logger.summ + (long)message) > Integer.MAX_VALUE) ||
+                (((long)Logger.summ + (long)message)) < Integer.MIN_VALUE;
     }
 }
