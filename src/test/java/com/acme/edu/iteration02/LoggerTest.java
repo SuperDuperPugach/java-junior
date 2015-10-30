@@ -67,7 +67,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         );
         //endregion
     }
-/*
+
     @Test
     public void shouldLogCorrectlyByteOverflowWhenSequentBytes() {
         //region when
@@ -76,19 +76,21 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         Logger.log((byte)Byte.MAX_VALUE);
         Logger.log("str 2");
         Logger.log(0);
+        Logger.close();
         //endregion
 
         //region then
         assertSysoutEquals(
-            "str 1\n" +
-            "10\n" +
+            "string: str 1\n" +
+            "primitive: 10\n" +
+                    "primitive: " +
             Byte.MAX_VALUE + "\n" +
-            "str 2\n" +
-            "0\n"
+            "string: str 2\n" +
+            "primitive: 0\n"
         );
         //endregion
     }
-
+/*
     @Test
     public void shouldLogSameSubsequentStringsWithoutRepeat() throws IOException {
         //region when
