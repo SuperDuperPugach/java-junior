@@ -70,17 +70,18 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         );
         //endregion
     }
-
+*/
     @Test
     public void shouldLogStringsWithOneMethodCall() throws IOException {
         //region when
         Logger.log("str1", "string 2", "str 3");
+        Logger.close();
         //endregion
 
         //region then
-        assertSysoutContains("str1\nstring 2\nstr 3");
+        assertSysoutContains("string: str1\nstring: string 2\nstring: str 3");
         //endregion
-    }*/
+    }
 
     @Test
     public void shouldLogIntegersWithOneMethodCall() throws IOException {

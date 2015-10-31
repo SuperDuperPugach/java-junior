@@ -1,5 +1,7 @@
 package com.acme.edu;
 
+import sun.rmi.runtime.Log;
+
 public class Logger {
     // format strings for print()
     private static final String PRIMITIVE_FORMAT     = "primitive: %s";
@@ -34,6 +36,24 @@ public class Logger {
         Logger.summ += message;
         if(!Logger.isSumm)
             Logger.isSumm = true;
+    }
+
+    /**
+     * Выводит в консоль элементы передаваемого массива
+     * в формате {a1,a2,...}
+     * @param message - массив
+     */
+    public static void log(int... message) {
+        Logger.print(ARRAY_FORMAT, Logger.arrayToString(message));
+    }
+
+    /**
+     * Выводит в консоль элементы передаваемого массива
+     * в формате {{a11, a12, ...}, ...}
+     * @param message - массив [][]
+     */
+    public static void log(int[][] message) {
+        Logger.print(MATRIX_FORMAT, Logger.matrixToString(message));
     }
 
     /**
@@ -84,31 +104,29 @@ public class Logger {
     }
 
     /**
+     * Выводит в консоль множество передаваемых строк.
+     * При последовательном введении повторяющихся сток -
+     * выводит один раз с указанием в скобках числа вызовов
+     * @param message массив строк
+     */
+    public static void log(String ... message) {
+        for(String s : message)
+            Logger.log(s);
+    }
+
+    /**
      * Выводит в консоль метод toString() объекта,
      * передаваемого в качестве параметра
      * @param message - параметр типа Object
      */
-    public static void log(final Object message) {
+    public static void log(Object message) {
         Logger.print(REFERENCE_FORMAT, message.toString());
     }
 
-    /**
-     * Выводит в консоль элементы передаваемого массива
-     * в формате {a1,a2,...}
-     * @param message - массив
-     */
-    public static void log(int... message) {
-        Logger.print(ARRAY_FORMAT, Logger.arrayToString(message));
-    }
 
-    /**
-     * Выводит в консоль элементы передаваемого массива
-     * в формате {{a11, a12, ...}, ...}
-     * @param message - массив [][]
-     */
-    public static void log(int[][] message) {
-        Logger.print(MATRIX_FORMAT, Logger.matrixToString(message));
-    }
+
+
+
 
     /**
      * Необходимо вызвать явно по завершению вызовов методов log()
@@ -117,11 +135,6 @@ public class Logger {
         Logger.closeInt();
         Logger.closeStr();
     }
-
-
-
-
-
 
     /**
      *вызывается для сброса в консоль суммы int
