@@ -57,12 +57,13 @@ public class Logger {
     }
 
     /**
-     *
-     * @param message
+     * Выводит в консоль элементы передаваемого массива
+     * @param message - 4х мерный массив
      */
-    /*public static void log(int[][][][] message) {
+    public static void log(int[][][][] message) {
+        Logger.print(MULTI_MATRIX_FORMAT, Logger.dimFourMatrixToString(message));
+    }
 
-    }*/
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа byte.
@@ -130,11 +131,6 @@ public class Logger {
         Logger.print(REFERENCE_FORMAT, message.toString());
     }
 
-
-
-
-
-
     /**
      * Необходимо вызвать явно по завершению вызовов методов log()
      */
@@ -142,6 +138,11 @@ public class Logger {
         Logger.closeInt();
         Logger.closeStr();
     }
+
+
+
+
+
 
     /**
      *вызывается для сброса в консоль суммы int
@@ -179,7 +180,6 @@ public class Logger {
 
     /**
      * устанавливает strCount= 1 и prevStr = message
-     * @param message
      */
     private static void strFirstSet(String message) {
         Logger.strCount = 1;
@@ -197,7 +197,7 @@ public class Logger {
 
     /**
      * метод проверяет выход за границы int
-     * @param message
+     * @param message - что проверить
      * @return возвращает true, если имеем выход за границы int
      */
     private static boolean isIntOverFlow(int message) {
@@ -208,8 +208,6 @@ public class Logger {
     /**
      * функция, возвращающая строку с элементами передаваемого массива
      * в формате {a1,a2,...}
-     * @param array - массив
-     * @return
      */
     private static String arrayToString(int[] array) {
         String strArray = "{"+array[0];
@@ -223,8 +221,6 @@ public class Logger {
     /**
      * функция, возвращающая строку с элементами передаваемого двумерного
      * массива в формате {{a11, a12, ...}, ...}
-     * @param matrix
-     * @return
      */
     private static String matrixToString(int[][] matrix) {
         String strMatrix = "{\n";
@@ -232,6 +228,32 @@ public class Logger {
             strMatrix += arrayToString(m) + "\n";
         }
         strMatrix +="}";
+        return strMatrix;
+    }
+
+    /**
+     * функция, возвращающая строку с элементами передаваемого трехмерного
+     * массива
+     */
+    private static String dimThreeMatrixToString(int[][][] matrix) {
+        String strMatrix = "{\n";
+        for(int[][] m : matrix) {
+            strMatrix += matrixToString(m);
+        }
+        strMatrix +="\n}";
+        return strMatrix;
+    }
+
+    /**
+     * функция, возвращающая строку с элементами передаваемого четырехмерного
+     * массива
+     */
+    private static String dimFourMatrixToString(int[][][][] matrix) {
+        String strMatrix = "{\n";
+        for(int[][][] m : matrix) {
+            strMatrix += dimThreeMatrixToString(m);
+        }
+        strMatrix +="\n}";
         return strMatrix;
     }
 }
