@@ -8,6 +8,7 @@ public class Logger {
     private static final String REFERENCE_FORMAT     = "reference: %s";
     private static final String STRING_FORMAT_REPEAT = "string: %s (x%s)";
     private static final String ARRAY_FORMAT         = "primitives array: %s";
+    private static final String MATRIX_FORMAT        = "primitives matrix: %s";
 
     private static int        summ                   = 0;     //хранит сумму
     private static boolean isSumm                    = false; // флаг, что в сумме что-то есть для сброса
@@ -101,17 +102,21 @@ public class Logger {
     }
 
     /**
+     * Выводит в консоль элементы передаваемого массива
+     * в формате {{a11, a12, ...}, ...}
+     * @param message - массив [][]
+     */
+    public static void log(int[][] message) {
+        print(MATRIX_FORMAT, matrixToString(message));
+    }
+
+    /**
      * Необходимо вызвать явно по завершению вызовов методов log()
      */
     public static void close() {
         closeInt();
         closeStr();
     }
-
-
-
-
-
 
     /**
      *вызывается для сброса в консоль суммы int
@@ -123,6 +128,11 @@ public class Logger {
            Logger.summ = 0;
        }
     }
+
+
+
+
+
 
     /**
      *вызывается для сброса в консоль string(с числом повторений)
@@ -188,5 +198,20 @@ public class Logger {
         }
         strArray+="}";
         return strArray;
+    }
+
+    /**
+     * функция, возвращающая строку с элементами передаваемого двумерного
+     * массива в формате {{a11, a12, ...}, ...}
+     * @param matrix
+     * @return
+     */
+    private static String matrixToString(int[][] matrix) {
+        String strMatrix = "{\n";
+        for(int[] m : matrix ) {
+            strMatrix += arrayToString(m) + "\n";
+        }
+        strMatrix +="}";
+        return strMatrix;
     }
 }

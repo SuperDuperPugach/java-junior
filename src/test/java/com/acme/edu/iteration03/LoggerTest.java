@@ -37,7 +37,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         //endregion
     }
 
-   /* @Test
+    @Test
     public void shouldLogIntegersMatrix() throws IOException {
         //region when
         Logger.log(new int[][] {{-1, 0, 1}, {1, 2, 3}, {-1, -2, -3}});
@@ -53,7 +53,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         );
         //endregion
     }
-
+/*
     @Test
     public void shouldLogIntegersMulitidimentionalArray() throws IOException {
         //region when
