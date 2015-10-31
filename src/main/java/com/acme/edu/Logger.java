@@ -1,6 +1,5 @@
 package com.acme.edu;
 
-import sun.rmi.runtime.Log;
 
 public class Logger {
     // format strings for print()
@@ -11,6 +10,7 @@ public class Logger {
     private static final String STRING_FORMAT_REPEAT = "string: %s (x%s)";
     private static final String ARRAY_FORMAT         = "primitives array: %s";
     private static final String MATRIX_FORMAT        = "primitives matrix: %s";
+    private static final String MULTI_MATRIX_FORMAT  = "primitives multimatrix: %s";
 
     private static int        summ                   = 0;     //хранит сумму
     private static boolean isSumm                    = false; // флаг, что в сумме что-то есть для сброса
@@ -56,6 +56,13 @@ public class Logger {
         Logger.print(MATRIX_FORMAT, Logger.matrixToString(message));
     }
 
+    /**
+     *
+     * @param message
+     */
+    /*public static void log(int[][][][] message) {
+
+    }*/
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа byte.
