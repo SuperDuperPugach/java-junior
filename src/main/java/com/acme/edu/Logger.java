@@ -27,9 +27,9 @@ public class Logger {
      * @param message - параметр типа int
      */
     public static void log(int message) {
-        closeStr();
+        Logger.closeStr();
         if(isIntOverFlow(message)) {
-            closeInt();
+            Logger.closeInt();
         }
         Logger.summ += message;
         if(!Logger.isSumm)
@@ -42,8 +42,8 @@ public class Logger {
      * @param message - параметр типа byte
      */
     public static void log(byte message) {
-        closeStr();
-        print(PRIMITIVE_FORMAT, Integer.toString(message));
+        Logger.closeStr();
+        Logger.print(PRIMITIVE_FORMAT, Integer.toString(message));
     }
 
     /**
@@ -52,7 +52,7 @@ public class Logger {
      * @param message -  параметр типа char
      */
     public static void log(char message) {
-        print(CHAR_FORMAT, Character.toString(message));
+        Logger.print(CHAR_FORMAT, Character.toString(message));
     }
 
     /**
@@ -61,7 +61,7 @@ public class Logger {
      * @param message - параметр типа boolean
      */
     public static void log(boolean message) {
-        print(PRIMITIVE_FORMAT, Boolean.toString(message));
+        Logger.print(PRIMITIVE_FORMAT, Boolean.toString(message));
     }
 
     /**
@@ -71,15 +71,15 @@ public class Logger {
      * @param message - параметр типа String
      */
     public static void log(String message) {
-        closeInt();
+        Logger.closeInt();
         if(message.equals(Logger.prevStr)) {
             Logger.strCount++;
         }
         else if(Logger.strCount != 0) {
-            closeStr();
-            strFirstSet(message);
+            Logger.closeStr();
+            Logger.strFirstSet(message);
         } else {
-            strFirstSet(message);
+            Logger.strFirstSet(message);
         }
     }
 
@@ -88,8 +88,8 @@ public class Logger {
      * передаваемого в качестве параметра
      * @param message - параметр типа Object
      */
-    public static void log(Object message) {
-        print(REFERENCE_FORMAT, message.toString());
+    public static void log(final Object message) {
+        Logger.print(REFERENCE_FORMAT, message.toString());
     }
 
     /**
@@ -97,8 +97,8 @@ public class Logger {
      * в формате {a1,a2,...}
      * @param message - массив
      */
-    public static void log(int[] message) {
-        print(ARRAY_FORMAT, arrayToString(message));
+    public static void log(int... message) {
+        Logger.print(ARRAY_FORMAT, Logger.arrayToString(message));
     }
 
     /**
@@ -107,16 +107,21 @@ public class Logger {
      * @param message - массив [][]
      */
     public static void log(int[][] message) {
-        print(MATRIX_FORMAT, matrixToString(message));
+        Logger.print(MATRIX_FORMAT, Logger.matrixToString(message));
     }
 
     /**
      * Необходимо вызвать явно по завершению вызовов методов log()
      */
     public static void close() {
-        closeInt();
-        closeStr();
+        Logger.closeInt();
+        Logger.closeStr();
     }
+
+
+
+
+
 
     /**
      *вызывается для сброса в консоль суммы int
@@ -128,11 +133,6 @@ public class Logger {
            Logger.summ = 0;
        }
     }
-
-
-
-
-
 
     /**
      *вызывается для сброса в консоль string(с числом повторений)
@@ -181,8 +181,8 @@ public class Logger {
      * @return возвращает true, если имеем выход за границы int
      */
     private static boolean isIntOverFlow(int message) {
-        return (((long)Logger.summ + (long)message) > Integer.MAX_VALUE) ||
-                (((long)Logger.summ + (long)message)) < Integer.MIN_VALUE;
+        return ((long)Logger.summ + (long)message) > Integer.MAX_VALUE ||
+                ((long)Logger.summ + (long)message) < Integer.MIN_VALUE;
     }
 
     /**
