@@ -1,17 +1,24 @@
 package com.acme.edu;
 
 public class Logger {
+    // format strings for print()
     private static final String PRIMITIVE_FORMAT     = "primitive: %s";
     private static final String CHAR_FORMAT          = "char: %s";
     private static final String STRING_FORMAT        = "string: %s";
     private static final String REFERENCE_FORMAT     = "reference: %s";
     private static final String STRING_FORMAT_REPEAT = "string: %s (x%s)";
+    private static final String ARRAY_FORMAT         = "primitives array: %s";
 
     private static int        summ                   = 0;     //хранит сумму
     private static boolean isSumm                    = false; // флаг, что в сумме что-то есть для сброса
 
     private static String prevStr                    = ""; //хранит предыдущую строку для сравнения
     private static int strCount                      = 0;   // счетчик количества повторяемых строк
+
+
+
+
+
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа int. В случае последоваельно вызванных методов,
@@ -38,7 +45,6 @@ public class Logger {
         print(PRIMITIVE_FORMAT, Integer.toString(message));
     }
 
-
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа char
@@ -59,7 +65,8 @@ public class Logger {
 
     /**
      * Выводит в консоль передаваемое в качестве параметра
-     * значение переменной типа String
+     * значение переменной типа String. При последовательном введении повторяющихся сток -
+     * выводит один раз с указанием в скобках числа вызовов
      * @param message - параметр типа String
      */
     public static void log(String message) {
@@ -85,12 +92,26 @@ public class Logger {
     }
 
     /**
+     * Выводит в консоль элементы передаваемого массива
+     * в формате {a1,a2,...}
+     * @param message - массив
+     */
+    public static void log(int[] message) {
+        print(ARRAY_FORMAT, arrayToString(message));
+    }
+
+    /**
      * Необходимо вызвать явно по завершению вызовов методов log()
      */
     public static void close() {
         closeInt();
         closeStr();
     }
+
+
+
+
+
 
     /**
      *вызывается для сброса в консоль суммы int
@@ -152,5 +173,20 @@ public class Logger {
     private static boolean isIntOverFlow(int message) {
         return (((long)Logger.summ + (long)message) > Integer.MAX_VALUE) ||
                 (((long)Logger.summ + (long)message)) < Integer.MIN_VALUE;
+    }
+
+    /**
+     * функция, возвращающая строку с элементами передаваемого массива
+     * в формате {a1,a2,...}
+     * @param array - массив
+     * @return
+     */
+    private static String arrayToString(int[] array) {
+        String strArray = "{"+array[0];
+        for (int i = 1; i < array.length; i++) {
+            strArray +=", " + Integer.toString(array[i]);
+        }
+        strArray+="}";
+        return strArray;
     }
 }
