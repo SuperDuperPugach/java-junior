@@ -159,15 +159,13 @@ public class Logger {
      *вызывается для сброса в консоль string(с числом повторений)
      */
     private static void closeStr() {
-        if(Logger.strCount == 0) //нечего выводить
-            return;
+        if(Logger.strCount == 0) return; //нечего выводить
         if(Logger.strCount == 1) {
             print(STRING_FORMAT, Logger.prevStr);
-            strReset();
         } else {
             print(STRING_FORMAT_REPEAT, Logger.prevStr, Integer.toString(Logger.strCount));
-            strReset();
         }
+        strReset();
     }
 
     /**
