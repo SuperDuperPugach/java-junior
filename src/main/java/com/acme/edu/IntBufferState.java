@@ -7,6 +7,7 @@ public class IntBufferState extends BufferState {
     int buffer = 0;
     public IntBufferState(BufferPrinter bufferPrinter) {
         super(bufferPrinter);
+        format = "primitive: %s";
     }
 
     @Override

@@ -15,11 +15,14 @@ public class Logger {
     private static final String MULTI_MATRIX_FORMAT  = "primitives multimatrix: %s";
 
 
-    private BufferState bufferState;
+
     private BufferPrinter bufferPrinter = new ConsolePrinter();
+    private BufferState bufferState;
 
     public void log(int message) {
-        if(bufferState.getState() != BufferState.State.INT) {
+        if(bufferState == null) {
+            bufferState = new IntBufferState(bufferPrinter);
+        } else if(bufferState.getState() != BufferState.State.INT) {
             bufferState.printBuffer();
             bufferState = new IntBufferState(bufferPrinter);
         }
@@ -27,10 +30,16 @@ public class Logger {
     }
 
     public void log(String message) {
-        if(bufferState.getState() != BufferState.State.STRING) {
+        if(bufferState == null) {
+            bufferState = new StringBufferState(bufferPrinter);
+        }else if(bufferState.getState() != BufferState.State.STRING) {
             bufferState.printBuffer();
             bufferState = new StringBufferState(bufferPrinter);
         }
         bufferState.pushMessageToBuffer(message, STRING_FORMAT);
+    }
+
+    public void close() {
+        bufferState.printBuffer();
     }
 }
