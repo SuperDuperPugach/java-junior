@@ -1,7 +1,7 @@
 package com.acme.edu;
 
 public class StringBufferState extends BufferState {
-    String buffer = "";
+    String buffer;
     public StringBufferState(BufferPrinter bufferPrinter) {
         super(bufferPrinter);
     }
@@ -14,9 +14,13 @@ public class StringBufferState extends BufferState {
     @Override
     void pushMessageToBuffer(String message, String format) {
         this.format = format;
-        if(!this.buffer.equals(message))
+        if(buffer == null)
+            this.buffer = message;
+        if(!this.buffer.equals(message)) {
             printBuffer();
-        this.buffer = message;
+            this.buffer = message;
+        }
+
 
     }
 
