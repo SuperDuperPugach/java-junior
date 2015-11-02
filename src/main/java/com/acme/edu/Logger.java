@@ -26,7 +26,7 @@ public class Logger {
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа int. В случае последоваельно вызванных методов,
      * выводит единожды сумму значений аргументов всех вызовов
-     * @param message - параметр типа int
+     * @param message - то, что следует вывести
      */
     public static void log(int message) {
         Logger.closeStr();
@@ -41,7 +41,7 @@ public class Logger {
     /**
      * Выводит в консоль элементы передаваемого массива
      * в формате {a1,a2,...}
-     * @param message - массив
+     * @param message - массив, который следует вывести
      */
     public static void log(int... message) {
         Logger.print(ARRAY_FORMAT, Logger.arrayToString(message));
@@ -50,7 +50,7 @@ public class Logger {
     /**
      * Выводит в консоль элементы передаваемого массива
      * в формате {{a11, a12, ...}, ...}
-     * @param message - массив [][]
+     * @param message - массив [][], который следует вывести
      */
     public static void log(int[][] message) {
         Logger.print(MATRIX_FORMAT, Logger.matrixToString(message));
@@ -58,7 +58,7 @@ public class Logger {
 
     /**
      * Выводит в консоль элементы передаваемого массива
-     * @param message - 4х мерный массив
+     * @param message - 4х мерный массив, который следует вывести
      */
     public static void log(int[][][][] message) {
         Logger.print(MULTI_MATRIX_FORMAT, Logger.dimFourMatrixToString(message));
@@ -67,7 +67,7 @@ public class Logger {
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа byte.
-     * @param message - параметр типа byte
+     * @param message - параметр, который следует вывести
      */
     public static void log(byte message) {
         Logger.closeStr();
@@ -77,7 +77,7 @@ public class Logger {
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа char
-     * @param message -  параметр типа char
+     * @param message -  параметр, который следует вывести
      */
     public static void log(char message) {
         Logger.print(CHAR_FORMAT, Character.toString(message));
@@ -86,7 +86,7 @@ public class Logger {
     /**
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа boolean
-     * @param message - параметр типа boolean
+     * @param message - параметр, который следует вывести
      */
     public static void log(boolean message) {
         Logger.print(PRIMITIVE_FORMAT, Boolean.toString(message));
@@ -96,7 +96,7 @@ public class Logger {
      * Выводит в консоль передаваемое в качестве параметра
      * значение переменной типа String. При последовательном введении повторяющихся сток -
      * выводит один раз с указанием в скобках числа вызовов
-     * @param message - параметр типа String
+     * @param message - параметр, который следует вывести
      */
     public static void log(String message) {
         Logger.closeInt();
@@ -115,7 +115,7 @@ public class Logger {
      * Выводит в консоль множество передаваемых строк.
      * При последовательном введении повторяющихся сток -
      * выводит один раз с указанием в скобках числа вызовов
-     * @param message массив строк
+     * @param message массив строк, который следует вывести
      */
     public static void log(String ... message) {
         for(String s : message)
@@ -125,7 +125,7 @@ public class Logger {
     /**
      * Выводит в консоль метод toString() объекта,
      * передаваемого в качестве параметра
-     * @param message - параметр типа Object
+     * @param message - параметр, который следует вывести
      */
     public static void log(Object message) {
         Logger.print(REFERENCE_FORMAT, message.toString());
