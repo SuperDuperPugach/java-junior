@@ -47,18 +47,18 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
 
-    /*@Test
+    @Test
     public void shouldLogSameSubsequentStringsWithoutRepeat() throws IOException {
         //region when
-        LoggerProcedure.log("str 1");
-        LoggerProcedure.log("str 2");
-        LoggerProcedure.log("str 2");
-        LoggerProcedure.log(0);
-        LoggerProcedure.log("str 2");
-        LoggerProcedure.log("str 3");
-        LoggerProcedure.log("str 3");
-        LoggerProcedure.log("str 3");
-        LoggerProcedure.close();
+        logger.log("str 1");
+        logger.log("str 2");
+        logger.log("str 2");
+        logger.log(0);
+        logger.log("str 2");
+        logger.log("str 3");
+        logger.log("str 3");
+        logger.log("str 3");
+        logger.close();
         //endregion
 
         //region then
@@ -70,7 +70,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
                         "string: str 3 (x3)\n"
         );
         //endregion
-    }*/
+    }
 
 
 }
