@@ -29,9 +29,9 @@ public class Logger {
      * @param message - то, что следует вывести
      */
     public static void log(int message) {
-        Logger.closeStr();
+        closeStr();
         if(isIntOverFlow(message)) {
-            Logger.closeInt();
+            closeInt();
         }
         Logger.summ += message;
         if(!Logger.isSumm)
@@ -44,7 +44,7 @@ public class Logger {
      * @param message - массив, который следует вывести
      */
     public static void log(int... message) {
-        Logger.print(ARRAY_FORMAT, Logger.arrayToString(message));
+        print(ARRAY_FORMAT, arrayToString(message));
     }
 
     /**
@@ -53,7 +53,7 @@ public class Logger {
      * @param message - массив [][], который следует вывести
      */
     public static void log(int[][] message) {
-        Logger.print(MATRIX_FORMAT, Logger.matrixToString(message));
+        print(MATRIX_FORMAT, matrixToString(message));
     }
 
     /**
@@ -61,7 +61,7 @@ public class Logger {
      * @param message - 4х мерный массив, который следует вывести
      */
     public static void log(int[][][][] message) {
-        Logger.print(MULTI_MATRIX_FORMAT, Logger.dimFourMatrixToString(message));
+        print(MULTI_MATRIX_FORMAT, dimFourMatrixToString(message));
     }
 
     /**
@@ -70,8 +70,8 @@ public class Logger {
      * @param message - параметр, который следует вывести
      */
     public static void log(byte message) {
-        Logger.closeStr();
-        Logger.print(PRIMITIVE_FORMAT, Integer.toString(message));
+        closeStr();
+        print(PRIMITIVE_FORMAT, Integer.toString(message));
     }
 
     /**
@@ -80,7 +80,7 @@ public class Logger {
      * @param message -  параметр, который следует вывести
      */
     public static void log(char message) {
-        Logger.print(CHAR_FORMAT, Character.toString(message));
+        print(CHAR_FORMAT, Character.toString(message));
     }
 
     /**
@@ -89,7 +89,7 @@ public class Logger {
      * @param message - параметр, который следует вывести
      */
     public static void log(boolean message) {
-        Logger.print(PRIMITIVE_FORMAT, Boolean.toString(message));
+        print(PRIMITIVE_FORMAT, Boolean.toString(message));
     }
 
     /**
@@ -99,15 +99,15 @@ public class Logger {
      * @param message - параметр, который следует вывести
      */
     public static void log(String message) {
-        Logger.closeInt();
+        closeInt();
         if(message.equals(Logger.prevStr)) {
             Logger.strCount++;
         }
         else if(Logger.strCount != 0) {
-            Logger.closeStr();
-            Logger.strFirstSet(message);
+            closeStr();
+            strFirstSet(message);
         } else {
-            Logger.strFirstSet(message);
+            strFirstSet(message);
         }
     }
 
@@ -119,7 +119,7 @@ public class Logger {
      */
     public static void log(String ... message) {
         for(String s : message)
-            Logger.log(s);
+            log(s);
     }
 
     /**
@@ -128,15 +128,15 @@ public class Logger {
      * @param message - параметр, который следует вывести
      */
     public static void log(Object message) {
-        Logger.print(REFERENCE_FORMAT, message.toString());
+        print(REFERENCE_FORMAT, message.toString());
     }
 
     /**
      * Необходимо вызвать явно по завершению вызовов методов log()
      */
     public static void close() {
-        Logger.closeInt();
-        Logger.closeStr();
+        closeInt();
+        closeStr();
     }
 
 
