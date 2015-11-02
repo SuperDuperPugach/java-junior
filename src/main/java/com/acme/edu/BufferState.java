@@ -13,7 +13,7 @@ public abstract class BufferState {
     }
     //для реализации возвращения типа текущего объекта
     enum State {
-        INT, STRING, OTHER
+        INT, STRING, DEFAULT
     }
     abstract State getState(); //возвращает тип текущего объекта(необходим для логгера)
     abstract void pushMessageToBuffer(String message, String format); //будет использоваться в логгере для передачи месседжа

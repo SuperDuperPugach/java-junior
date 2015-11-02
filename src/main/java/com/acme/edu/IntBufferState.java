@@ -23,5 +23,7 @@ public class IntBufferState extends BufferState {
     @Override
     void printBuffer() {
         bufferPrinter.print(Integer.toString(buffer), format);
+        this.buffer = 0;
+        this.format = null;
     }
 }

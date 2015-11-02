@@ -39,6 +39,16 @@ public class Logger {
         bufferState.pushMessageToBuffer(message, STRING_FORMAT);
     }
 
+    public void log(char message) {
+        if(bufferState == null) {
+            bufferState = new DefaultBufferState(bufferPrinter);
+        } else if (bufferState.getState() != BufferState.State.DEFAULT) {
+            bufferState.printBuffer();
+            bufferState = new DefaultBufferState(bufferPrinter);
+        }
+        bufferState.pushMessageToBuffer(Character.toString(message), CHAR_FORMAT);
+    }
+
     public void close() {
         bufferState.printBuffer();
     }

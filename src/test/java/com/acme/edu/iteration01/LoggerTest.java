@@ -56,6 +56,21 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
+    public void shouldLogChar() throws IOException {
+        //region when
+        logger.log('a');
+        logger.log('b');
+        logger.close();
+        //endregion
+
+        //region then
+        assertSysoutContains("char: ");
+        assertSysoutContains("a");
+        assertSysoutContains("b");
+        //endregion
+    }
+
+    @Test
     public void shouldLogString() throws IOException {
         //region when
         logger.log("test string 1");
