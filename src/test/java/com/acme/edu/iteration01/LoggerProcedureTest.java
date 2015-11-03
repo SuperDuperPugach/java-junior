@@ -4,10 +4,12 @@ import com.acme.edu.LoggerProcedure;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 
+@Ignore
 public class LoggerProcedureTest implements SysoutCaptureAndAssertionAbility {
     //region given
     @Before
