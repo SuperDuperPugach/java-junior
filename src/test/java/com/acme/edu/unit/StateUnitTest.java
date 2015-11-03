@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class StateUnitTest {
@@ -25,9 +26,10 @@ public class StateUnitTest {
         BufferPrinter mock = mock(BufferPrinter.class);
         BufferState sut = new IntBufferState(mock);
         sut.pushMessageToBuffer("5", "primitive: %s");
+        sut.pushMessageToBuffer("10", "primitive: %s");
         sut.printBuffer();
 
-        verify(mock).print("5", "primitive: %s");
+        verify(mock, times(1)).print("15", "primitive: %s");
 
     }
 
@@ -36,9 +38,31 @@ public class StateUnitTest {
         BufferPrinter mock = mock(BufferPrinter.class);
         BufferState sut = new StringBufferState(mock);
         sut.pushMessageToBuffer("str 1", "string: %s");
+        sut.pushMessageToBuffer("str 1", "string: %s");
+        sut.pushMessageToBuffer("str 1", "string: %s");
+        sut.pushMessageToBuffer("str 2", "string: %s");
         sut.printBuffer();
 
-        verify(mock).print("str 1", "string: %s");
+        verify(mock, times(1)).print("str 1 (x3)", "string: %s");
+        verify(mock, times(1)).print("str 2", "string: %s");
 
     }
+
+    @Test
+    public void shouldCallBufferPrinterPrintIfSomethingInBuffer() {
+        BufferPrinter mock = mock(BufferPrinter.class);
+        BufferState sut = new StringBufferState(mock);
+        sut.pushMessageToBuffer("str 1", "string: %s");
+        sut.pushMessageToBuffer("str 1", "string: %s");
+        sut.printBuffer();
+        sut = new IntBufferState(mock);
+        sut.pushMessageToBuffer("5", "primitive: %s");
+        sut.pushMessageToBuffer("7", "primitive: %s");
+        sut.printBuffer();
+
+        verify(mock, times(1)).print("str 1 (x2)", "string: %s");
+        verify(mock, times(1)).print("12", "primitive: %s");
+
+    }
+
 }
