@@ -1,4 +1,6 @@
-package com.acme.edu;
+package com.acme.edu.state;
+
+import com.acme.edu.print.BufferPrinter;
 
 /**
  * Created by pugach on 02/11/15.
@@ -12,12 +14,12 @@ public abstract class BufferState {
         this.bufferPrinter = bufferPrinter;
     }
     //для реализации возвращения типа текущего объекта
-    enum State {
+    public enum State {
         INT, STRING, DEFAULT
     }
-    abstract State getState(); //возвращает тип текущего объекта(необходим для логгера)
-    abstract void pushMessageToBuffer(String message, String format); //будет использоваться в логгере для передачи месседжа
+    abstract public State getState(); //возвращает тип текущего объекта(необходим для логгера)
+    abstract public void pushMessageToBuffer(String message, String format); //будет использоваться в логгере для передачи месседжа
 
-    abstract void printBuffer(); // печать буфера
+    abstract public void printBuffer(); // печать буфера
 
 }

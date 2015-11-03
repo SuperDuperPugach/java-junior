@@ -1,4 +1,4 @@
-package com.acme.edu;
+package com.acme.edu.print;
 
 /**
  * Created by pugach on 02/11/15.

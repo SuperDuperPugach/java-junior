@@ -1,4 +1,6 @@
-package com.acme.edu;
+package com.acme.edu.state;
+
+import com.acme.edu.print.BufferPrinter;
 
 /**
  * Created by pugach on 02/11/15.
@@ -21,7 +23,7 @@ public class IntBufferState extends BufferState {
     }
 
     @Override
-    void printBuffer() {
+    public void printBuffer() {
         bufferPrinter.print(Integer.toString(buffer), format);
         this.buffer = 0;
         this.format = null;

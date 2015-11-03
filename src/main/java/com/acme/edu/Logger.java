@@ -1,8 +1,12 @@
 package com.acme.edu;
 
-/**
- * Created by pugach on 02/11/15.
- */
+import com.acme.edu.print.BufferPrinter;
+import com.acme.edu.print.ConsolePrinter;
+import com.acme.edu.state.BufferState;
+import com.acme.edu.state.DefaultBufferState;
+import com.acme.edu.state.IntBufferState;
+import com.acme.edu.state.StringBufferState;
+
 public class Logger {
     // format strings for print()
     private static final String PRIMITIVE_FORMAT     = "primitive: %s";

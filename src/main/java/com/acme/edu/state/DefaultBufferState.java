@@ -1,4 +1,6 @@
-package com.acme.edu;
+package com.acme.edu.state;
+
+import com.acme.edu.print.BufferPrinter;
 
 /**
  * Created by pugach on 03/11/15.
@@ -10,12 +12,12 @@ public class DefaultBufferState extends BufferState {
     }
 
     @Override
-    State getState() {
+    public State getState() {
         return State.DEFAULT;
     }
 
     @Override
-    void pushMessageToBuffer(String message, String format) {
+    public void pushMessageToBuffer(String message, String format) {
         if(buffer != null)
             printBuffer();
         this.format = format;
@@ -23,7 +25,7 @@ public class DefaultBufferState extends BufferState {
     }
 
     @Override
-    void printBuffer() {
+    public void printBuffer() {
         bufferPrinter.print(buffer, format);
         this.buffer = null;
         this.format = null;
