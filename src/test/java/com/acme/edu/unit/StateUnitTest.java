@@ -2,6 +2,7 @@ package com.acme.edu.unit;
 
 import com.acme.edu.print.BufferPrinter;
 import com.acme.edu.state.BufferState;
+import com.acme.edu.state.DefaultBufferState;
 import com.acme.edu.state.IntBufferState;
 import com.acme.edu.state.StringBufferState;
 import org.junit.Before;
@@ -64,6 +65,28 @@ public class StateUnitTest {
         verify(mock, times(1)).print("str 1 (x2)", "string: %s");
         verify(mock, times(1)).print("12", "primitive: %s");
 
+    }
+
+    @Test
+    public void shouldCallBufferPrinterIfStackOverFlowInIntBufferState() {
+        BufferPrinter mock = mock(BufferPrinter.class);
+        BufferState sut = new IntBufferState(mock);
+        sut.pushMessageToBuffer(Integer.toString(Integer.MAX_VALUE - 10), "primitive: %s");
+        sut.pushMessageToBuffer(Integer.toString(100), "primitive: %s");
+
+        verify(mock, times(1)).print(Integer.toString(Integer.MAX_VALUE - 10), "primitive: %s");
+    }
+
+    @Test
+    public void shouldCallBufferPrinterIfSomethingInBufferInDefaultBufferState() {
+        BufferPrinter mock = mock(BufferPrinter.class);
+        BufferState sut = new DefaultBufferState(mock);
+        sut.pushMessageToBuffer("d", "char: %s");
+        sut.pushMessageToBuffer("{1, 2}", "array: %s");
+        sut.pushMessageToBuffer("k", "char: %s");
+
+        verify(mock, times(1)).print("d", "char: %s");
+        verify(mock, times(1)).print("{1, 2}", "array: %s");
     }
 
 }

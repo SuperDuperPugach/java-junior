@@ -2,6 +2,9 @@ package com.acme.edu.state;
 
 import com.acme.edu.print.BufferPrinter;
 
+/**
+ * Реализация буффера состояния String
+ */
 public class StringBufferState extends BufferState {
     private String buffer;
     private int count;

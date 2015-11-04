@@ -3,7 +3,7 @@ package com.acme.edu.state;
 import com.acme.edu.print.BufferPrinter;
 
 /**
- * Реализация буффера состояния
+ * Реализация буффера состояния по умолчанию
  */
 public class DefaultBufferState extends BufferState {
     private String buffer;
