@@ -46,25 +46,16 @@ public class BufferStateSwitcherTest {
 
     }
     // тесты на возвращаемый тип
-    @Test @Ignore
-    public void shouldreturnDefaultStateWhenSwitchToDefaultFromAnotherState() {
+    @Test
+    public void shouldreturnDefaultStateWhenSwitchToDefaultFromNullState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
-        BufferState mockState = mock(IntBufferState.class);
+        BufferState mockState = null;
         BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
         BufferState newMockState = bufferStateSwitcher.switchToDefaultState(mockState);
 
         assertTrue(newMockState instanceof DefaultBufferState);
     }
 
-    @Test @Ignore
-    public void shouldreturnStringStateWhenSwitchToStringFromAnotherState() {
-        BufferPrinter mockPrinter = mock(BufferPrinter.class);
-        BufferState mockState = mock(IntBufferState.class);
-        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
-        BufferState newMockState = bufferStateSwitcher.switchToStringState(mockState);
-
-        assertTrue(newMockState instanceof StringBufferState);
-    }
 
     @Test
     public void shouldreturnIntStateWhenSwitchToIntFromAnotherState() {
