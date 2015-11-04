@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-@Ignore
+
 public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     Logger logger;
     //region given

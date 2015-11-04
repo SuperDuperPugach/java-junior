@@ -16,7 +16,7 @@ public class BufferStateSwitcherTest {
     public void initLogger() {
     }
     //endregion
-
+    //test should call printer
     @Test
     public void shouldCallBufferPrinterPrintWhenChangeDefaultToStringState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
@@ -29,7 +29,19 @@ public class BufferStateSwitcherTest {
 
     }
 
-    //
+    @Test
+    public void shouldCallBufferPrinterPrintWhenChangeIntToDefaultState() {
+        BufferPrinter mockPrinter = mock(BufferPrinter.class);
+        BufferState stubState = mock(IntBufferState.class);
+        when(stubState.getState()).thenReturn(States.INT);
+        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
+        bufferStateSwitcher.switchToStringState(stubState);
+
+        verify(stubState, times(1)).printBuffer();
+
+    }
+
+    //test should not call printer
     @Test
     public void shouldNotCallBufferPrinterPrintWhenChangeStringToStringState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
