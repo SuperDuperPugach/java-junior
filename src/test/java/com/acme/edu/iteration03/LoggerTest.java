@@ -9,9 +9,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-/**
- * Created by pugach on 04/11/15.
- */
+@Ignore
 public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     Logger logger;
 

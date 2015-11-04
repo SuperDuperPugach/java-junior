@@ -13,11 +13,12 @@ import static org.mockito.Mockito.verify;
 
 public class StateUnitTest {
     private BufferState bufferState;
+    //private BufferPrinter mock;
 
     //region given
     @Before
     public void initLogger() {
-
+       // BufferPrinter mock = mock(BufferPrinter.class);
     }
     //endregion
 

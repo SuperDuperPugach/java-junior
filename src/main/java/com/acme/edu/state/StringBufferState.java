@@ -54,7 +54,6 @@ public class StringBufferState extends BufferState {
             buffer += " (x" + count + ")";
         bufferPrinter.print(buffer, format);
         this.buffer = null;
-        this.format = null;
         this.count = 0;
     }
 }

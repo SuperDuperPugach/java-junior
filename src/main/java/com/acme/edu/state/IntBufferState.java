@@ -6,7 +6,7 @@ import com.acme.edu.print.BufferPrinter;
  * Реализация буффера состояния типа int
  */
 public class IntBufferState extends BufferState {
-    private int buffer = 0;
+    private int buffer;
 
     /**
      * Конструктор, инициализируеший buffer printer конкретным экземпляром класса,
@@ -15,6 +15,7 @@ public class IntBufferState extends BufferState {
      */
     public IntBufferState(BufferPrinter bufferPrinter) {
         super(bufferPrinter);
+        buffer = 0;
     }
 
     /**
