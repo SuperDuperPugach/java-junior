@@ -6,14 +6,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by pugach on 04/11/15.
- */
+
 public class BufferStateSwitcherTest {
     //region given
     @Before
@@ -34,7 +30,7 @@ public class BufferStateSwitcherTest {
     }
 
     //
-    @Test @Ignore
+    @Test
     public void shouldNotCallBufferPrinterPrintWhenChangeStringToStringState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
         BufferState stubState = mock(StringBufferState.class);
@@ -60,9 +56,10 @@ public class BufferStateSwitcherTest {
     @Test
     public void shouldreturnIntStateWhenSwitchToIntFromAnotherState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
-        BufferState mockState = mock(StringBufferState.class);
+        BufferState stubState = mock(StringBufferState.class);
+        when(stubState.getState()).thenReturn(States.STRING);
         BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
-        BufferState newMockState = bufferStateSwitcher.switchToIntState(mockState);
+        BufferState newMockState = bufferStateSwitcher.switchToIntState(stubState);
 
         assertTrue(newMockState instanceof IntBufferState);
     }
