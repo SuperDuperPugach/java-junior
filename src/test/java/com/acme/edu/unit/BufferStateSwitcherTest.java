@@ -56,7 +56,7 @@ public class BufferStateSwitcherTest {
         assertTrue(newMockState instanceof DefaultBufferState);
     }
 
-    @Test
+    @Test @Ignore
     public void shouldreturnStringStateWhenSwitchToStringFromAnotherState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
         BufferState mockState = mock(IntBufferState.class);
@@ -66,7 +66,7 @@ public class BufferStateSwitcherTest {
         assertTrue(newMockState instanceof StringBufferState);
     }
 
-    @Test
+    @Test @Ignore
     public void shouldreturnIntStateWhenSwitchToIntFromAnotherState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
         BufferState mockState = mock(StringBufferState.class);
