@@ -1,13 +1,13 @@
 package com.acme.edu.unit;
 
 import com.acme.edu.print.BufferPrinter;
-import com.acme.edu.state.BufferState;
-import com.acme.edu.state.BufferStateSwitcher;
-import com.acme.edu.state.IntBufferState;
-import com.acme.edu.state.StringBufferState;
+import com.acme.edu.state.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -23,10 +23,10 @@ public class BufferStateSwitcherTest {
     }
     //endregion
 
-    @Test
-    public void shouldCallBufferPrinterPrintWhenChangeIntToStringState() {
+    @Test @Ignore
+    public void shouldCallBufferPrinterPrintWhenChangeDefaultToStringState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
-        BufferState mockState = mock(IntBufferState.class);
+        BufferState mockState = mock(DefaultBufferState.class);
         BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
         BufferState newMockState = bufferStateSwitcher.switchToStringState(mockState);
 
@@ -34,25 +34,45 @@ public class BufferStateSwitcherTest {
 
     }
 
+    //
+    @Test @Ignore
+    public void shouldNotCallBufferPrinterPrintWhenChangeStringToStringState() {
+        BufferPrinter mockPrinter = mock(BufferPrinter.class);
+        BufferState mockState = mock(StringBufferState.class);
+        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
+        BufferState newMockState = bufferStateSwitcher.switchToStringState(mockState);
+
+
+
+    }
+    //
     @Test
-    public void shouldCallBufferPrinterPrintWhenChangeIntToDefaultState() {
+    public void shouldreturnDefaultStateWhenSwitchToDefaultFromAnotherState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
         BufferState mockState = mock(IntBufferState.class);
         BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
         BufferState newMockState = bufferStateSwitcher.switchToDefaultState(mockState);
 
-        verify(mockState, times(1)).printBuffer();
-
+        assertTrue(newMockState instanceof DefaultBufferState);
     }
 
     @Test
-    public void shouldCallBufferPrinterPrintWhenChangeStringToDefaultState() {
+    public void shouldreturnStringStateWhenSwitchToStringFromAnotherState() {
+        BufferPrinter mockPrinter = mock(BufferPrinter.class);
+        BufferState mockState = mock(IntBufferState.class);
+        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
+        BufferState newMockState = bufferStateSwitcher.switchToStringState(mockState);
+
+        assertTrue(newMockState instanceof StringBufferState);
+    }
+
+    @Test
+    public void shouldreturnIntStateWhenSwitchToIntFromAnotherState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
         BufferState mockState = mock(StringBufferState.class);
         BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
-        BufferState newMockState = bufferStateSwitcher.switchToDefaultState(mockState);
+        BufferState newMockState = bufferStateSwitcher.switchToIntState(mockState);
 
-        verify(mockState, times(1)).printBuffer();
-
+        assertTrue(newMockState instanceof IntBufferState);
     }
 }
