@@ -17,9 +17,9 @@ public abstract class BufferState {
     public enum State {
         INT, STRING, DEFAULT
     }
-    abstract public State getState(); //возвращает тип текущего объекта(необходим для логгера)
-    abstract public void pushMessageToBuffer(String message, String format); //будет использоваться в логгере для передачи месседжа
+    public abstract  State getState(); //возвращает тип текущего объекта(необходим для логгера)
+    public abstract void pushMessageToBuffer(String message, String format); //будет использоваться в логгере для передачи месседжа
 
-    abstract public void printBuffer(); // печать буфера
+    public abstract void printBuffer(); // печать буфера
 
 }

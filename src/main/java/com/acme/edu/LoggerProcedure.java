@@ -57,8 +57,8 @@ public class LoggerProcedure {
     }
 
     /**
-     * Выводит в консоль элементы передаваемого массива
-     * @param message - 4х мерный массив, который следует вывести
+     * Выводит в консоль элементы 4х мерного передаваемого массива
+     * @param message - массив, который следует вывести
      */
     public static void log(int[][][][] message) {
         print(MULTI_MATRIX_FORMAT, dimFourMatrixToString(message));

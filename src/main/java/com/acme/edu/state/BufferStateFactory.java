@@ -4,9 +4,7 @@ package com.acme.edu.state;
 import com.acme.edu.print.BufferPrinter;
 
 public class BufferStateFactory {
-   // private IntBufferState intBufferState;
-   // private StringBufferState stringBufferState;
-   // private DefaultBufferState defaultBufferState;
+
     private BufferPrinter bufferPrinter;
 
     /**

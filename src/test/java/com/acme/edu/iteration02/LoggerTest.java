@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-@Ignore
 public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     Logger logger;
 
@@ -41,6 +40,28 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         assertSysoutEquals(
                 "string: str 1\n" +
                         "primitive: 3\n" +
+                        "string: str 2\n" +
+                        "primitive: 0\n"
+        );
+        //endregion
+    }
+
+    @Test
+    public void shouldLogCorrectlyIntegerOverflowWhenSequentIntegers() {
+        //region when
+        logger.log("str 1");
+        logger.log(10);
+        logger.log(Integer.MAX_VALUE);
+        logger.log("str 2");
+        logger.log(0);
+        logger.close();
+        //endregion
+
+        //region then
+        assertSysoutEquals(
+                "string: str 1\n" +
+                        "primitive: 10\n" +
+                        "primitive: " + Integer.MAX_VALUE + "\n" +
                         "string: str 2\n" +
                         "primitive: 0\n"
         );

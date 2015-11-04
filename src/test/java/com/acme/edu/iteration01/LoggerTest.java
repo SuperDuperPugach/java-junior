@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-@Ignore
+
 public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     Logger logger;
     //region given
@@ -58,6 +58,21 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
+    public void shouldLogBoolean() throws IOException {
+        //region when
+        logger.log(true);
+        logger.log(false);
+        logger.close();
+        //endregion
+
+        //region then
+        assertSysoutContains("primitive: ");
+        assertSysoutContains("true");
+        assertSysoutContains("false");
+        //endregion
+    }
+
+    @Test
     public void shouldLogChar() throws IOException {
         //region when
         logger.log('a');
@@ -84,6 +99,19 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         assertSysoutContains("string: ");
         assertSysoutContains("test string 1");
         assertSysoutContains("other str");
+        //endregion
+    }
+
+    @Test
+    public void shouldLogReference() throws IOException {
+        //region when
+        logger.log(new Object());
+        logger.close();
+        //endregion
+
+        //region then
+        assertSysoutContains("reference: ");
+        assertSysoutContains("@");
         //endregion
     }
 

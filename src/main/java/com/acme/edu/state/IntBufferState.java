@@ -18,6 +18,10 @@ public class IntBufferState extends BufferState {
 
     @Override
     public void pushMessageToBuffer(String message, String format) {
+        if (isIntOverFlow(Integer.parseInt(message))) {
+            bufferPrinter.print(Integer.toString(buffer), format);
+            buffer = 0;
+        }
         buffer += Integer.parseInt(message); //суммируем с буфером
         this.format = format;
     }
@@ -27,5 +31,10 @@ public class IntBufferState extends BufferState {
         bufferPrinter.print(Integer.toString(buffer), format);
         this.buffer = 0;
         this.format = null;
+    }
+
+    private  boolean isIntOverFlow(int message) {
+        return ((long) buffer + (long)message) > Integer.MAX_VALUE ||
+                ((long) buffer + (long)message) < Integer.MIN_VALUE;
     }
 }
