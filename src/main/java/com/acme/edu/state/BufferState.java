@@ -3,23 +3,39 @@ package com.acme.edu.state;
 import com.acme.edu.print.BufferPrinter;
 
 /**
- * Created by pugach on 02/11/15.
+ * Абстрактный класс состояний буффера
  */
 public abstract class BufferState {
-    //String buffer; //буффер
-    String format; //формат
-    BufferPrinter bufferPrinter; //ссылка для хранения определенной реализации вывода сообщения
-    //конструктор
-    BufferState(BufferPrinter bufferPrinter) {
+    protected String format;
+    protected BufferPrinter bufferPrinter;
+
+    /**
+     * Конструктор, инициализируеший buffer printer конкретным экземпляром класса,
+     * реализующего абстрактный класс BufferPrinter
+     * @param bufferPrinter - экземпляр класса, реализующий абстрактный класс BufferPrinter
+     */
+    public BufferState(BufferPrinter bufferPrinter) {
         this.bufferPrinter = bufferPrinter;
     }
-    //для реализации возвращения типа текущего объекта
-    public enum State {
-        INT, STRING, DEFAULT
-    }
-    public abstract  State getState(); //возвращает тип текущего объекта(необходим для логгера)
-    public abstract void pushMessageToBuffer(String message, String format); //будет использоваться в логгере для передачи месседжа
 
+    /**
+     * Абстрактный метод, который должен возвращать краткое имя состояния из States
+     * @return - краткое имя состояния
+     */
+    public abstract States getState();
+
+    /**
+     * Абстрактный метод, в котором реализуется свое поведение, характерное
+     * для каждого состояния, при помещении сообщения в буффер состояния
+     * @param message
+     * @param format
+     */
+    public abstract void pushMessageToBuffer(String message, String format);
+
+    /**
+     * Абстрактный метод, в котором должно реализовываться обращение к текущему bufferPrintr
+     * для печати буффера
+     */
     public abstract void printBuffer(); // печать буфера
 
 }

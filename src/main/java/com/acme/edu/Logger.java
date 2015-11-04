@@ -17,13 +17,13 @@ public class Logger {
 
 
     private BufferState bufferState;
-    private BufferStateFactory bufferStateFactory;
+    private BufferStateSwitcher bufferStateSwitcher;
 
     /**
      * Конструктор по умолчанию. Реализует вывод в консоль
      */
     public Logger() {
-        bufferStateFactory = new BufferStateFactory(new ConsolePrinter());
+        bufferStateSwitcher = new BufferStateSwitcher(new ConsolePrinter());
     }
 
     /**
@@ -33,7 +33,7 @@ public class Logger {
      * @param message - то, что следует вывести
      */
     public void log(int message) {
-        bufferState = bufferStateFactory.switchToIntState(bufferState);
+        bufferState = bufferStateSwitcher.switchToIntState(bufferState);
         bufferState.pushMessageToBuffer(Integer.toString(message), PRIMITIVE_FORMAT);
     }
 
@@ -43,7 +43,7 @@ public class Logger {
      * @param message - массив, который следует вывести
      */
     public void log(int... message) {
-        bufferState = bufferStateFactory.switchToDefaultState(bufferState);
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(arrayToString(message), ARRAY_FORMAT );
     }
 
@@ -53,7 +53,7 @@ public class Logger {
      * @param message - массив [][], который следует вывести
      */
     public void log(int[][] message) {
-        bufferState = bufferStateFactory.switchToDefaultState(bufferState);
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(matrixToString(message), MATRIX_FORMAT);
     }
 
@@ -62,7 +62,7 @@ public class Logger {
      * @param message - массив, который следует вывести
      */
     public void log(int[][][][] message) {
-        bufferState = bufferStateFactory.switchToDefaultState(bufferState);
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(dimFourMatrixToString(message), MULTI_MATRIX_FORMAT);
     }
 
@@ -72,7 +72,7 @@ public class Logger {
      * @param message - то, что следует вывести
      */
     public void log(boolean message) {
-        bufferState = bufferStateFactory.switchToDefaultState(bufferState);
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(Boolean.toString(message), PRIMITIVE_FORMAT);
     }
 
@@ -83,7 +83,7 @@ public class Logger {
      * @param message - то, что следует вывести
      */
     public void log(String message) {
-        bufferState = bufferStateFactory.switchToStringState(bufferState);
+        bufferState = bufferStateSwitcher.switchToStringState(bufferState);
         bufferState.pushMessageToBuffer(message, STRING_FORMAT);
     }
 
@@ -103,7 +103,7 @@ public class Logger {
      * @param message -  то, что следует вывести
      */
     public void log(char message) {
-        bufferState = bufferStateFactory.switchToDefaultState(bufferState);
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(Character.toString(message), CHAR_FORMAT);
     }
     /**
@@ -112,7 +112,7 @@ public class Logger {
      * @param message - объект, toString() метод которого нужно вывести
      */
     public void log(Object message) {
-        bufferState = bufferStateFactory.switchToDefaultState(bufferState);
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(message.toString(), REFERENCE_FORMAT);
     }
     /**
@@ -128,7 +128,7 @@ public class Logger {
      * @param - экзмпляр класса, реализующего абстрактный класс BufferPrinter
      */
     public void setBufferPrinter(BufferPrinter bp) {
-        bufferStateFactory = new BufferStateFactory(bp);
+        bufferStateSwitcher = new BufferStateSwitcher(bp);
     }
 
 

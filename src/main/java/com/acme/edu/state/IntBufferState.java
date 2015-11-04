@@ -3,19 +3,36 @@ package com.acme.edu.state;
 import com.acme.edu.print.BufferPrinter;
 
 /**
- * Created by pugach on 02/11/15.
+ * Реализация буффера состояния типа int
  */
 public class IntBufferState extends BufferState {
-    int buffer = 0;
+    private int buffer = 0;
+
+    /**
+     * Конструктор, инициализируеший buffer printer конкретным экземпляром класса,
+     * реализующего абстрактный класс BufferPrinter
+     * @param bufferPrinter - экземпляр класса, реализующий абстрактный класс BufferPrinter
+     */
     public IntBufferState(BufferPrinter bufferPrinter) {
         super(bufferPrinter);
     }
 
+    /**
+     * Возращает краткое имя текущего состояния
+     * @return - краткое имя состояния
+     */
     @Override
-    public State getState() {
-        return State.INT;
+    public States getState() {
+        return States.INT;
     }
 
+    /**
+     * Принимает сообщение в свой буффер и по необходимости обрабатываеть его,
+     * учитывая предыдущее состояние и его буффер. При последовательном вводе int,
+     * суммирует эти значения и хранит в буффере.
+     * @param message - сообщение для хранения в буффере
+     * @param format - предполагаемый формат вывода из буффера
+     */
     @Override
     public void pushMessageToBuffer(String message, String format) {
         if (isIntOverFlow(Integer.parseInt(message))) {
@@ -26,6 +43,10 @@ public class IntBufferState extends BufferState {
         this.format = format;
     }
 
+    /**
+     * Печать из буффера согласно конкретной реализации BufferPrint, которая
+     * используется для данного состояния
+     */
     @Override
     public void printBuffer() {
         bufferPrinter.print(Integer.toString(buffer), format);
