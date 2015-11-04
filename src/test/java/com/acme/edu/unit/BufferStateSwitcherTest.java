@@ -23,7 +23,7 @@ public class BufferStateSwitcherTest {
     }
     //endregion
 
-    @Test @Ignore
+    @Test
     public void shouldCallBufferPrinterPrintWhenChangeDefaultToStringState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
         BufferState mockState = mock(DefaultBufferState.class);
@@ -45,7 +45,7 @@ public class BufferStateSwitcherTest {
 
 
     }
-    //
+    // тесты на возвращаемый тип
     @Test
     public void shouldreturnDefaultStateWhenSwitchToDefaultFromAnotherState() {
         BufferPrinter mockPrinter = mock(BufferPrinter.class);
