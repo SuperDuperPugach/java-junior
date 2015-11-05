@@ -1,6 +1,7 @@
 package com.acme.edu.state;
 
 import com.acme.edu.print.BufferPrinter;
+import com.acme.edu.except.BufferPrinterException;
 
 /**
  * Реализация буффера состояния типа int
@@ -37,7 +38,7 @@ public class IntBufferState extends BufferState {
     @Override
     public void pushMessageToBuffer(String message, String format) {
         if (isIntOverFlow(Integer.parseInt(message))) {
-            bufferPrinter.print(Integer.toString(buffer), format);
+            printBuffer();
             buffer = 0;
         }
         buffer += Integer.parseInt(message); //суммируем с буфером
@@ -50,7 +51,11 @@ public class IntBufferState extends BufferState {
      */
     @Override
     public void printBuffer() {
-        bufferPrinter.print(Integer.toString(buffer), format);
+        try {
+            bufferPrinter.print(Integer.toString(buffer), format);
+        } catch (BufferPrinterException e) {
+            e.printStackTrace();
+        }
         this.buffer = 0;
     }
 

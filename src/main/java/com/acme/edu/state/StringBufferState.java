@@ -1,5 +1,6 @@
 package com.acme.edu.state;
 
+import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.print.BufferPrinter;
 
 /**
@@ -55,7 +56,11 @@ public class StringBufferState extends BufferState {
     public void printBuffer() {
         if (count > 1)
             buffer += " (x" + count + ")";
-        bufferPrinter.print(buffer, format);
+        try {
+            bufferPrinter.print(buffer, format);
+        } catch (BufferPrinterException e) {
+            e.printStackTrace();
+        }
         this.buffer = null;
         this.count = 0;
     }

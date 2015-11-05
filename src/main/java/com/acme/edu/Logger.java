@@ -1,5 +1,6 @@
 package com.acme.edu;
 
+import com.acme.edu.except.NullInLogException;
 import com.acme.edu.print.BufferPrinter;
 import com.acme.edu.print.ConsolePrinter;
 import com.acme.edu.state.*;
@@ -82,7 +83,10 @@ public class Logger {
      * выводит один раз с указанием в скобках числа вызовов
      * @param message - то, что следует вывести
      */
-    public void log(String message) {
+    public void log(String message) throws NullInLogException {
+        if(message == null) {
+            throw new NullInLogException();
+        }
         bufferState = bufferStateSwitcher.switchToStringState(bufferState);
         bufferState.pushMessageToBuffer(message, STRING_FORMAT);
     }
@@ -93,7 +97,7 @@ public class Logger {
      * выводит один раз с указанием в скобках числа вызовов
      * @param message массив строк, который следует вывести
      */
-    public void log(String ... message) {
+    public void log(String ... message) throws NullInLogException {
         for(String s : message) log(s);
     }
 
@@ -112,8 +116,11 @@ public class Logger {
      * @param message - объект, toString() метод которого нужно вывести
      */
     public void log(Object message) {
+        if(message == null) {
+            throw new NullInLogException();
+        }
         bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
-        bufferState.pushMessageToBuffer(message.toString(), REFERENCE_FORMAT);
+        bufferState.pushMessageToBuffer(""+message, REFERENCE_FORMAT);
     }
     /**
      * Необходимо вызвать явно по завершению вызовов методов log()

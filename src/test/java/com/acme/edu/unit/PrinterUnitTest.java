@@ -1,8 +1,8 @@
 package com.acme.edu.unit;
 
 
-import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
+import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.print.BufferPrinter;
 import com.acme.edu.print.ConsolePrinter;
 import org.junit.After;
@@ -30,7 +30,11 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     @Test
     public void ShouldPrintInConsole() {
         //region when
-        bufferPrinter.print("155", "primitive: %s");
+        try {
+            bufferPrinter.print("155", "primitive: %s");
+        } catch (BufferPrinterException e) {
+            e.printStackTrace();
+        }
         //endregion
 
         //region then
