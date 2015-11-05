@@ -3,7 +3,7 @@ package com.acme.edu.print;
 /**
  * Реализация абстрактного класса BufferPrinter с выводом в консоль
  */
-public class ConsolePrinter extends BufferPrinter {
+public class ConsolePrinter implements BufferPrinter {
     /**
      * Реализация абстрактного метода с выводом в консоль
      * @param buffer - что печатать
