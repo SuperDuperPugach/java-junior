@@ -10,8 +10,8 @@ public class DefaultBufferState extends BufferState {
 
     /**
      * Конструктор, инициализируеший buffer printer конкретным экземпляром класса,
-     * реализующего абстрактный класс BufferPrinter
-     * @param bufferPrinter - экземпляр класса, реализующий абстрактный класс BufferPrinter
+     * реализующего интерфейс BufferPrinter
+     * @param bufferPrinter - экземпляр класса, реализующий интерфейс BufferPrinter
      */
     public DefaultBufferState(BufferPrinter bufferPrinter) {
         super(bufferPrinter);

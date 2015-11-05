@@ -10,8 +10,8 @@ public class IntBufferState extends BufferState {
 
     /**
      * Конструктор, инициализируеший buffer printer конкретным экземпляром класса,
-     * реализующего абстрактный класс BufferPrinter
-     * @param bufferPrinter - экземпляр класса, реализующий абстрактный класс BufferPrinter
+     * реализующего интерфейс BufferPrinter
+     * @param bufferPrinter - экземпляр класса, реализующий интерфейс BufferPrinter
      */
     public IntBufferState(BufferPrinter bufferPrinter) {
         super(bufferPrinter);
@@ -52,7 +52,6 @@ public class IntBufferState extends BufferState {
     public void printBuffer() {
         bufferPrinter.print(Integer.toString(buffer), format);
         this.buffer = 0;
-        this.format = null;
     }
 
     private  boolean isIntOverFlow(int message) {

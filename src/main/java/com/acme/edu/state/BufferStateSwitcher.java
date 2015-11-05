@@ -13,9 +13,9 @@ public class BufferStateSwitcher {
 
     /**
      * Инициализирует новый переключатель. Принимает на вход экземпляр конкретной
-     * реализации абстрактного класса BufferPrinter. Этой реализацией будут инициализироваться
+     * реализации интерфейса BufferPrinter. Этой реализацией будут инициализироваться
      * состояния при переключении
-     * @param - экземпляр класса, реализующий абстрактный класс BufferPrinter
+     * @param - экземпляр класса, реализующий интерфейс BufferPrinter
      */
     public BufferStateSwitcher(BufferPrinter bp) {
         this.bufferPrinter = bp;

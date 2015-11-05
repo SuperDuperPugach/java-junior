@@ -11,7 +11,7 @@ public abstract class BufferState {
 
     /**
      * Конструктор, инициализируеший buffer printer конкретным экземпляром класса,
-     * реализующего абстрактный класс BufferPrinter
+     * реализующего интерфейс BufferPrinter
      * @param bufferPrinter - экземпляр класса, реализующий абстрактный класс BufferPrinter
      */
     public BufferState(BufferPrinter bufferPrinter) {
