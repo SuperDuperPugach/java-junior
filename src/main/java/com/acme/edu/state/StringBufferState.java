@@ -1,6 +1,6 @@
 package com.acme.edu.state;
 
-import com.acme.edu.except.BufferPrinterException;
+import com.acme.edu.except.IllegalFormatPrinterException;
 import com.acme.edu.print.BufferPrinter;
 
 /**
@@ -58,8 +58,8 @@ public class StringBufferState extends BufferState {
             buffer += " (x" + count + ")";
         try {
             bufferPrinter.print(buffer, format);
-        } catch (BufferPrinterException e) {
-            e.printStackTrace();
+        } catch (IllegalFormatPrinterException e) {
+            bufferPrinter.print(ERROR_MESSAGE, ERROR_FORMAT);
         }
         this.buffer = null;
         this.count = 0;

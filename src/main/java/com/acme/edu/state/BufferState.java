@@ -6,6 +6,9 @@ import com.acme.edu.print.BufferPrinter;
  * Абстрактный класс состояний буффера
  */
 public abstract class BufferState {
+    protected final String ERROR_FORMAT = "ERROR: %s";
+    protected final String ERROR_MESSAGE = "wrong output format";
+
     protected String format;
     protected BufferPrinter bufferPrinter;
 

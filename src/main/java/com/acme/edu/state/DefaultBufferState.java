@@ -1,7 +1,7 @@
 package com.acme.edu.state;
 
+import com.acme.edu.except.IllegalFormatPrinterException;
 import com.acme.edu.print.BufferPrinter;
-import com.acme.edu.except.BufferPrinterException;
 
 /**
  * Реализация буффера состояния по умолчанию
@@ -49,8 +49,8 @@ public class DefaultBufferState extends BufferState {
     public void printBuffer() {
         try {
             bufferPrinter.print(buffer, format);
-        } catch (BufferPrinterException e) {
-            e.printStackTrace();
+        } catch (IllegalFormatPrinterException e) {
+            bufferPrinter.print(ERROR_MESSAGE, ERROR_FORMAT);
         }
         this.buffer = null;
         this.format = null;

@@ -1,7 +1,7 @@
 package com.acme.edu.state;
 
+import com.acme.edu.except.IllegalFormatPrinterException;
 import com.acme.edu.print.BufferPrinter;
-import com.acme.edu.except.BufferPrinterException;
 
 /**
  * Реализация буффера состояния типа int
@@ -53,8 +53,8 @@ public class IntBufferState extends BufferState {
     public void printBuffer() {
         try {
             bufferPrinter.print(Integer.toString(buffer), format);
-        } catch (BufferPrinterException e) {
-            e.printStackTrace();
+        } catch (IllegalFormatPrinterException e) {
+            bufferPrinter.print(ERROR_MESSAGE, ERROR_FORMAT);
         }
         this.buffer = 0;
     }
