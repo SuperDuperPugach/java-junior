@@ -1,5 +1,6 @@
 package com.acme.edu;
 
+import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.except.NullInLogException;
 import com.acme.edu.print.BufferPrinter;
 import com.acme.edu.print.ConsolePrinter;
@@ -17,6 +18,7 @@ public class Logger {
 
 
 
+    private BufferPrinter[] bufferPrinter;
     private BufferState bufferState;
     private BufferStateSwitcher bufferStateSwitcher;
 
@@ -24,9 +26,31 @@ public class Logger {
      * Конструктор по умолчанию. Реализует вывод в консоль
      */
     public Logger() {
-        bufferStateSwitcher = new BufferStateSwitcher(new ConsolePrinter());
+        this.bufferPrinter = new BufferPrinter[1];
+        this.bufferPrinter[0] = new ConsolePrinter();
+        this.bufferStateSwitcher = new BufferStateSwitcher(bufferPrinter);
     }
 
+    /**
+     * Конструктор, принимающий в качестве параметра экземпляр класса,
+     * реализующего интрефейс BufferPrinter
+     * @param bp - реализация интерфейса BufferPrinter
+     */
+    public Logger(BufferPrinter bp) {
+        this.bufferPrinter = new BufferPrinter[1];
+        this.bufferPrinter[0] = bp;
+        this.bufferStateSwitcher = new BufferStateSwitcher(bufferPrinter);
+    }
+    /**
+     *
+     */
+    public Logger(BufferPrinter... bp) {
+        bufferPrinter = new BufferPrinter[bp.length];
+        for (int i = 0; i < bp.length; i++) {
+            this.bufferPrinter[i] = bp[i];
+        }
+        this.bufferStateSwitcher = new BufferStateSwitcher(bufferPrinter);
+    }
     /**
      * Конструктор, принимающий в качестве параметра экземпляр переключателя состояний
      * (Основная задача - возможность провести юнит тесты класса Logger)
@@ -42,7 +66,7 @@ public class Logger {
      * выводит единожды сумму значений аргументов всех вызовов
      * @param message - то, что следует вывести
      */
-    public void log(int message) {
+    public void log(int message) throws BufferPrinterException {
         bufferState = bufferStateSwitcher.switchToIntState(bufferState);
         bufferState.pushMessageToBuffer(Integer.toString(message), PRIMITIVE_FORMAT);
     }
@@ -52,7 +76,7 @@ public class Logger {
      * в формате {a1,a2,...}
      * @param message - массив, который следует вывести
      */
-    public void log(int... message) {
+    public void log(int... message) throws BufferPrinterException {
         bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(arrayToString(message), ARRAY_FORMAT );
     }
@@ -62,7 +86,7 @@ public class Logger {
      * в формате {{a11, a12, ...}, ...}
      * @param message - массив [][], который следует вывести
      */
-    public void log(int[][] message) {
+    public void log(int[][] message) throws BufferPrinterException {
         bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(matrixToString(message), MATRIX_FORMAT);
     }
@@ -71,7 +95,7 @@ public class Logger {
      * Выводит (в консоль по умолчанию) элементы 4х мерного передаваемого массива
      * @param message - массив, который следует вывести
      */
-    public void log(int[][][][] message) {
+    public void log(int[][][][] message) throws BufferPrinterException {
         bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(dimFourMatrixToString(message), MULTI_MATRIX_FORMAT);
     }
@@ -81,7 +105,7 @@ public class Logger {
      * значение переменной типа boolean
      * @param message - то, что следует вывести
      */
-    public void log(boolean message) {
+    public void log(boolean message) throws BufferPrinterException {
         bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(Boolean.toString(message), PRIMITIVE_FORMAT);
     }
@@ -92,7 +116,7 @@ public class Logger {
      * выводит один раз с указанием в скобках числа вызовов
      * @param message - то, что следует вывести
      */
-    public void log(String message) throws NullInLogException {
+    public void log(String message) throws NullInLogException, BufferPrinterException {
         if(message == null) {
             throw new NullInLogException();
         }
@@ -106,7 +130,7 @@ public class Logger {
      * выводит один раз с указанием в скобках числа вызовов
      * @param message массив строк, который следует вывести
      */
-    public void log(String ... message) throws NullInLogException {
+    public void log(String ... message) throws NullInLogException, BufferPrinterException {
         for(String s : message) log(s);
     }
 
@@ -115,7 +139,7 @@ public class Logger {
      * значение переменной типа char
      * @param message -  то, что следует вывести
      */
-    public void log(char message) {
+    public void log(char message) throws BufferPrinterException {
         bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
         bufferState.pushMessageToBuffer(Character.toString(message), CHAR_FORMAT);
     }
@@ -124,29 +148,24 @@ public class Logger {
      * передаваемого в качестве параметра
      * @param message - объект, toString() метод которого нужно вывести
      */
-    public void log(Object message) {
+    public void log(Object message) throws NullInLogException, BufferPrinterException {
         if(message == null) {
             throw new NullInLogException();
         }
         bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
-        bufferState.pushMessageToBuffer(""+message, REFERENCE_FORMAT);
+        bufferState.pushMessageToBuffer("" + message, REFERENCE_FORMAT);
     }
     /**
      * Необходимо вызвать явно по завершению вызовов методов log()
      * для корректного завершения вывода
      */
-    public void close() {
+    public void close() throws BufferPrinterException {
         bufferState.printBuffer();
-    }
+        for (BufferPrinter bp : bufferPrinter) {
+            bp.close();
+        }
 
-    /**
-     * Устанавливает buffer printer, отвечающий за вывод информации(по умолчанию в консоль)
-     * @param - экзмпляр класса, реализующего абстрактный класс BufferPrinter
-     */
-    public void setBufferPrinter(BufferPrinter bp) {
-        bufferStateSwitcher = new BufferStateSwitcher(bp);
     }
-
 
     /**
      * функция, возвращающая строку с элементами передаваемого массива

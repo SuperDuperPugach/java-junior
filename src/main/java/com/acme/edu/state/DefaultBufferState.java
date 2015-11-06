@@ -1,6 +1,6 @@
 package com.acme.edu.state;
 
-import com.acme.edu.except.IllegalFormatPrinterException;
+import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.print.BufferPrinter;
 
 /**
@@ -14,7 +14,7 @@ public class DefaultBufferState extends BufferState {
      * реализующего интерфейс BufferPrinter
      * @param bufferPrinter - экземпляр класса, реализующий интерфейс BufferPrinter
      */
-    public DefaultBufferState(BufferPrinter bufferPrinter) {
+    public DefaultBufferState(BufferPrinter[] bufferPrinter) {
         super(bufferPrinter);
     }
 
@@ -34,7 +34,7 @@ public class DefaultBufferState extends BufferState {
      * @param format - предполагаемый формат вывода из буффера
      */
     @Override
-    public void pushMessageToBuffer(String message, String format) {
+    public void pushMessageToBuffer(String message, String format) throws BufferPrinterException {
         if(buffer != null)
             printBuffer();
         this.format = format;
@@ -46,12 +46,11 @@ public class DefaultBufferState extends BufferState {
      * используется для данного состояния
      */
     @Override
-    public void printBuffer() {
-        try {
-            bufferPrinter.print(buffer, format);
-        } catch (IllegalFormatPrinterException e) {
-            bufferPrinter.print(ERROR_MESSAGE, ERROR_FORMAT);
+    public void printBuffer() throws BufferPrinterException {
+        for (BufferPrinter bp : bufferPrinter) {
+            bp.print(buffer, format);
         }
+
         this.buffer = null;
         this.format = null;
     }

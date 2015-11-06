@@ -1,6 +1,7 @@
 package com.acme.edu.state;
 
 
+import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.print.BufferPrinter;
 
 /**
@@ -9,7 +10,7 @@ import com.acme.edu.print.BufferPrinter;
  */
 public class BufferStateSwitcher {
 
-    private BufferPrinter bufferPrinter;
+    private BufferPrinter[] bufferPrinter;
 
     /**
      * Инициализирует новый переключатель. Принимает на вход экземпляр конкретной
@@ -17,7 +18,7 @@ public class BufferStateSwitcher {
      * состояния при переключении
      * @param - экземпляр класса, реализующий интерфейс BufferPrinter
      */
-    public BufferStateSwitcher(BufferPrinter bp) {
+    public BufferStateSwitcher(BufferPrinter[] bp) {
         this.bufferPrinter = bp;
     }
 
@@ -27,7 +28,7 @@ public class BufferStateSwitcher {
      * @param bufferState - предыдущее состояние
      * @return - новое Int состояние
      */
-    public BufferState switchToIntState(BufferState bufferState) {
+    public BufferState switchToIntState(BufferState bufferState) throws BufferPrinterException {
         BufferState newBufferState = bufferState;
         if(bufferState == null) {
             newBufferState = new IntBufferState(bufferPrinter);
@@ -44,7 +45,7 @@ public class BufferStateSwitcher {
      * @param bufferState - предыдущее состояние
      * @return - новое String состояние
      */
-    public BufferState switchToStringState(BufferState bufferState) {
+    public BufferState switchToStringState(BufferState bufferState) throws BufferPrinterException {
         BufferState newBufferState = bufferState;
         if(bufferState == null) {
             newBufferState = new StringBufferState(bufferPrinter);
@@ -61,7 +62,7 @@ public class BufferStateSwitcher {
      * @param bufferState - предыдущее состояние
      * @return - новое Default состояние
      */
-    public BufferState switchToDefaultState(BufferState bufferState) {
+    public BufferState switchToDefaultState(BufferState bufferState) throws BufferPrinterException {
         BufferState newBufferState = bufferState;
         if(bufferState == null) {
             newBufferState = new DefaultBufferState(bufferPrinter);

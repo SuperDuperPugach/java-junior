@@ -1,5 +1,6 @@
 package com.acme.edu.unit;
 
+import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.print.BufferPrinter;
 import com.acme.edu.state.*;
 import org.junit.Before;
@@ -19,10 +20,10 @@ public class BufferStateSwitcherTest {
     //endregion
     //test should call printer
     @Test
-    public void shouldCallBufferPrinterPrintWhenChangeDefaultToStringState() {
+    public void shouldCallBufferPrinterPrintWhenChangeDefaultToStringState() throws BufferPrinterException {
         BufferState stubState = mock(DefaultBufferState.class);
         when(stubState.getState()).thenReturn(States.DEFAULT);
-        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
+        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(new BufferPrinter[]{mockPrinter});
         bufferStateSwitcher.switchToStringState(stubState);
 
         verify(stubState, times(1)).printBuffer();
@@ -30,10 +31,10 @@ public class BufferStateSwitcherTest {
     }
 
     @Test
-    public void shouldCallBufferPrinterPrintWhenChangeIntToDefaultState() {
+    public void shouldCallBufferPrinterPrintWhenChangeIntToDefaultState() throws BufferPrinterException {
         BufferState stubState = mock(IntBufferState.class);
         when(stubState.getState()).thenReturn(States.INT);
-        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
+        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(new BufferPrinter[]{mockPrinter});
         bufferStateSwitcher.switchToStringState(stubState);
 
         verify(stubState, times(1)).printBuffer();
@@ -42,10 +43,10 @@ public class BufferStateSwitcherTest {
 
     //test should not call printer
     @Test
-    public void shouldNotCallBufferPrinterPrintWhenChangeStringToStringState() {
+    public void shouldNotCallBufferPrinterPrintWhenChangeStringToStringState() throws BufferPrinterException {
         BufferState stubState = mock(StringBufferState.class);
         when(stubState.getState()).thenReturn(States.STRING);
-        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
+        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(new BufferPrinter[]{mockPrinter});
         bufferStateSwitcher.switchToStringState(stubState);
 
         verify(stubState, times(0)).printBuffer();
@@ -53,9 +54,9 @@ public class BufferStateSwitcherTest {
     }
     // тесты на возвращаемый тип
     @Test
-    public void shouldreturnDefaultStateWhenSwitchToDefaultFromNullState() {
+    public void shouldreturnDefaultStateWhenSwitchToDefaultFromNullState() throws BufferPrinterException {
         BufferState mockState = null;
-        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
+        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(new BufferPrinter[]{mockPrinter});
         BufferState newMockState = bufferStateSwitcher.switchToDefaultState(mockState);
 
         assertTrue(newMockState instanceof DefaultBufferState);
@@ -63,10 +64,10 @@ public class BufferStateSwitcherTest {
 
 
     @Test
-    public void shouldreturnIntStateWhenSwitchToIntFromAnotherState() {
+    public void shouldreturnIntStateWhenSwitchToIntFromAnotherState() throws BufferPrinterException {
         BufferState stubState = mock(StringBufferState.class);
         when(stubState.getState()).thenReturn(States.STRING);
-        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(mockPrinter);
+        BufferStateSwitcher bufferStateSwitcher = new BufferStateSwitcher(new BufferPrinter[]{mockPrinter});
         BufferState newMockState = bufferStateSwitcher.switchToIntState(stubState);
 
         assertTrue(newMockState instanceof IntBufferState);

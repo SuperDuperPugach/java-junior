@@ -3,6 +3,8 @@ package com.acme.edu.print;
 import com.acme.edu.except.BufferPrinterException;
 
 import java.io.*;
+import java.util.IllegalFormatException;
+
 /**
  * Реализация абстрактного класса BufferPrinter с выводом в файл
  */
@@ -16,7 +18,7 @@ public class FilePrinter implements BufferPrinter {
      * необходимо писать логи
      * @param name - имя файла
      */
-    public FilePrinter(String name) {
+    public FilePrinter(String name) throws BufferPrinterException {
         this.fileName = new File(name);
         this.charSet = "UTF-8";
         initPrintWriter();
@@ -28,7 +30,7 @@ public class FilePrinter implements BufferPrinter {
      * @param name - имя файла
      * @param charSet - имя кодировки
      */
-    public FilePrinter(String name, String charSet) {
+    public FilePrinter(String name, String charSet) throws BufferPrinterException {
         this.fileName = new File(name);
         this.charSet = charSet;
         initPrintWriter();
@@ -41,7 +43,7 @@ public class FilePrinter implements BufferPrinter {
      * @throws BufferPrinterException
      */
     @Override
-    public void print(String buffer, String format) throws BufferPrinterException {
+    public void print(String buffer, String format) {
         if(printWriter != null) {
             printWriter.println(String.format(format, buffer));
         }
@@ -58,16 +60,18 @@ public class FilePrinter implements BufferPrinter {
         }
     }
 
-    private void initPrintWriter() {
+    private void initPrintWriter() throws BufferPrinterException {
+
         try {
             printWriter = new PrintWriter(new BufferedWriter(
                     new OutputStreamWriter(
                             new FileOutputStream(fileName,true), charSet)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            throw new BufferPrinterException("Unsupported Encoding");
+        } catch (FileNotFoundException e) {
+            throw new BufferPrinterException("File not found");
         }
+
     }
 
 }

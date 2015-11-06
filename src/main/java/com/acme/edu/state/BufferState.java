@@ -1,5 +1,6 @@
 package com.acme.edu.state;
 
+import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.print.BufferPrinter;
 
 /**
@@ -10,14 +11,14 @@ public abstract class BufferState {
     protected final String ERROR_MESSAGE = "wrong output format";
 
     protected String format;
-    protected BufferPrinter bufferPrinter;
+    protected BufferPrinter[] bufferPrinter;
 
     /**
      * Конструктор, инициализируеший buffer printer конкретным экземпляром класса,
      * реализующего интерфейс BufferPrinter
      * @param bufferPrinter - экземпляр класса, реализующий абстрактный класс BufferPrinter
      */
-    public BufferState(BufferPrinter bufferPrinter) {
+    public BufferState(BufferPrinter[] bufferPrinter) {
         this.bufferPrinter = bufferPrinter;
     }
 
@@ -33,12 +34,12 @@ public abstract class BufferState {
      * @param message
      * @param format
      */
-    public abstract void pushMessageToBuffer(String message, String format);
+    public abstract void pushMessageToBuffer(String message, String format) throws BufferPrinterException;
 
     /**
      * Абстрактный метод, в котором должно реализовываться обращение к текущему bufferPrintr
      * для печати буффера
      */
-    public abstract void printBuffer(); // печать буфера
+    public abstract void printBuffer() throws BufferPrinterException; // печать буфера
 
 }
