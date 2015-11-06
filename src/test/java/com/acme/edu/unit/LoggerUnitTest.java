@@ -23,10 +23,12 @@ public class LoggerUnitTest implements SysoutCaptureAndAssertionAbility {
     public void setUpSystemOut() throws IOException {
         loggerForException = new Logger();
         mockState = mock(BufferState.class);
+
         stubSwitcher = mock(BufferStateSwitcher.class);
-        when(stubSwitcher.switchToIntState(null)).thenReturn(new IntBufferState(null));
-        when(stubSwitcher.switchToStringState(null)).thenReturn(new StringBufferState(null));
-        when(stubSwitcher.switchToDefaultState(null)).thenReturn(new DefaultBufferState(null));
+        when(stubSwitcher.switchToIntState(anyObject())).thenReturn(new IntBufferState(null));
+        when(stubSwitcher.switchToStringState(anyObject())).thenReturn(new StringBufferState(null));
+        when(stubSwitcher.switchToDefaultState(anyObject())).thenReturn(new DefaultBufferState(null));
+
         loggerForLog = new Logger(stubSwitcher);
         resetOut();
         captureSysout();
@@ -42,9 +44,10 @@ public class LoggerUnitTest implements SysoutCaptureAndAssertionAbility {
     @Test
     public void shouldCallSwitchtoIntStateMethodWhenCallLogInt() {
         loggerForLog.log(1);
-        //loggerForLog.log(2);
+        loggerForLog.log(2);
+        loggerForLog.log(2);
 
-        verify(stubSwitcher).switchToIntState(any());
+        verify(stubSwitcher, times(3)).switchToIntState(anyObject());
     }
 
     @Test
@@ -72,14 +75,14 @@ public class LoggerUnitTest implements SysoutCaptureAndAssertionAbility {
     public void shouldCallSwitchtoStringStateMethodWhenCallLogString() {
         loggerForLog.log("str");
 
-        verify(stubSwitcher).switchToStringState(any());
+        verify(stubSwitcher, times(1)).switchToStringState(any());
     }
 
     /*@Test
     public void shouldCallSwitchtoStringStateMethodWhenCallLogVarargString() {
         loggerForLog.log("str1", "str2", "str3");
 
-        verify(stubSwitcher).switchToStringState(any());
+        verify(stubSwitcher, times(3)).switchToStringState(anyObject());
     }*/
     @Test
     public void shouldCallSwitchtoDefaultStateMethodWhenCallLogChar() {

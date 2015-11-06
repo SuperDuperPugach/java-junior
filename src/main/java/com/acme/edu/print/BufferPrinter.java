@@ -8,9 +8,14 @@ import com.acme.edu.except.BufferPrinterException;
  */
 public interface BufferPrinter {
     /**
-     * Метод, который необходимо определить в реализуемом классе
+     * Метод вызова записи, который необходимо определить в реализуемом классе
      * @param buffer - что печатать
      * @param format - шаблон вывода
      */
-    public abstract void print(String buffer, String format) throws BufferPrinterException;
+    void print(String buffer, String format) throws BufferPrinterException;
+
+    /**
+     * Метод окончания записи
+     */
+    void close();
 }

@@ -21,4 +21,12 @@ public class ConsolePrinter implements BufferPrinter {
             throw new IllegalFormatPrinterException();
         }
     }
+
+    /**
+     * ??Пустышка??
+     */
+    @Override
+    public void close() {
+        return;
+    }
 }
