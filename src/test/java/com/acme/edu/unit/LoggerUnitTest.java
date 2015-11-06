@@ -3,7 +3,6 @@ package com.acme.edu.unit;
 import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
 import com.acme.edu.except.NullInLogException;
-import com.acme.edu.print.BufferPrinter;
 import com.acme.edu.state.*;
 import org.junit.After;
 import org.junit.Before;
@@ -39,8 +38,7 @@ public class LoggerUnitTest implements SysoutCaptureAndAssertionAbility {
     }
     //endregion
 
-    //endregion
-
+    //region log() methods
     @Test
     public void shouldCallSwitchtoIntStateMethodWhenCallLogInt() {
         loggerForLog.log(1);
@@ -103,8 +101,7 @@ public class LoggerUnitTest implements SysoutCaptureAndAssertionAbility {
 
         verify(stubSwitcher).switchToDefaultState(any());
     }
-
-    //region log() methods
+    //endregion
 
     //region exception
     @Test(expected = NullInLogException.class)
@@ -118,6 +115,8 @@ public class LoggerUnitTest implements SysoutCaptureAndAssertionAbility {
 
         loggerForException.log((String) null, (String) null, (String) null);
     }
+
+
 
     @Test(expected = NullInLogException.class)
     public void shouldCatchExceptionIfNullObject() {
