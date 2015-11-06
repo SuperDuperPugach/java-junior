@@ -3,10 +3,7 @@ package com.acme.edu;
 import com.acme.edu.except.NullInLogException;
 import com.acme.edu.print.BufferPrinter;
 import com.acme.edu.print.ConsolePrinter;
-import com.acme.edu.state.BufferState;
-import com.acme.edu.state.BufferStateSwitcher;
-
-import java.util.ArrayList;
+import com.acme.edu.state.*;
 
 public class Logger {
     // format strings for print()
@@ -19,34 +16,15 @@ public class Logger {
     private static final String MULTI_MATRIX_FORMAT  = "primitives multimatrix: %s";
 
 
-    private ArrayList<BufferPrinter> listBufferPrinter;
-    private ArrayList<BufferState> listBufferState;
-    private ArrayList<BufferStateSwitcher> listBufferStateSwitcher;
+
+    private BufferState bufferState;
+    private BufferStateSwitcher bufferStateSwitcher;
 
     /**
      * Конструктор по умолчанию. Реализует вывод в консоль
      */
     public Logger() {
-        listBufferPrinter = new ArrayList<BufferPrinter>();
-        listBufferState = new ArrayList<BufferState>();
-        listBufferStateSwitcher = new ArrayList<BufferStateSwitcher>();
-        listBufferPrinter.add(new ConsolePrinter());
-        listBufferStateSwitcher.add(new BufferStateSwitcher(listBufferPrinter.get(0)));
-        listBufferState.add(null);
-    }
-
-    /**
-     *
-     */
-    public Logger(BufferPrinter... bp) {
-        listBufferPrinter = new ArrayList<BufferPrinter>();
-        listBufferState = new ArrayList<BufferState>();
-        listBufferStateSwitcher = new ArrayList<BufferStateSwitcher>();
-        for(BufferPrinter bufferPrinter : bp) {
-            listBufferPrinter.add(bufferPrinter);
-            listBufferStateSwitcher.add(new BufferStateSwitcher(bufferPrinter));
-            listBufferState.add(null);
-        }
+        bufferStateSwitcher = new BufferStateSwitcher(new ConsolePrinter());
     }
 
     /**
@@ -55,11 +33,7 @@ public class Logger {
      * @param bss - переключатель состояний типа BufferStateSwitcher
      */
     public Logger(BufferStateSwitcher bss) {
-        listBufferPrinter = new ArrayList<BufferPrinter>();
-        listBufferState = new ArrayList<BufferState>();
-        listBufferStateSwitcher = new ArrayList<BufferStateSwitcher>();
-        listBufferStateSwitcher.add(bss);
-        listBufferState.add(null);
+        this.bufferStateSwitcher = bss;
     }
 
     /**
@@ -69,10 +43,8 @@ public class Logger {
      * @param message - то, что следует вывести
      */
     public void log(int message) {
-        for(int i = 0; i < listBufferStateSwitcher.size(); i++) {
-            listBufferState.set(i,listBufferStateSwitcher.get(i).switchToIntState(listBufferState.get(i)));
-            listBufferState.get(i).pushMessageToBuffer(Integer.toString(message), PRIMITIVE_FORMAT);
-        }
+        bufferState = bufferStateSwitcher.switchToIntState(bufferState);
+        bufferState.pushMessageToBuffer(Integer.toString(message), PRIMITIVE_FORMAT);
     }
 
     /**
@@ -81,10 +53,8 @@ public class Logger {
      * @param message - массив, который следует вывести
      */
     public void log(int... message) {
-        for(int i = 0; i < listBufferStateSwitcher.size(); i++) {
-            listBufferState.set(i,listBufferStateSwitcher.get(i).switchToDefaultState(listBufferState.get(i)));
-            listBufferState.get(i).pushMessageToBuffer(arrayToString(message), ARRAY_FORMAT);
-        }
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
+        bufferState.pushMessageToBuffer(arrayToString(message), ARRAY_FORMAT );
     }
 
     /**
@@ -93,10 +63,8 @@ public class Logger {
      * @param message - массив [][], который следует вывести
      */
     public void log(int[][] message) {
-        for(int i = 0; i < listBufferStateSwitcher.size(); i++) {
-            listBufferState.set(i,listBufferStateSwitcher.get(i).switchToDefaultState(listBufferState.get(i)));
-            listBufferState.get(i).pushMessageToBuffer(matrixToString(message), MATRIX_FORMAT);
-        }
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
+        bufferState.pushMessageToBuffer(matrixToString(message), MATRIX_FORMAT);
     }
 
     /**
@@ -104,10 +72,8 @@ public class Logger {
      * @param message - массив, который следует вывести
      */
     public void log(int[][][][] message) {
-        for(int i = 0; i < listBufferStateSwitcher.size(); i++) {
-            listBufferState.set(i,listBufferStateSwitcher.get(i).switchToDefaultState(listBufferState.get(i)));
-            listBufferState.get(i).pushMessageToBuffer(dimFourMatrixToString(message), MULTI_MATRIX_FORMAT);
-        }
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
+        bufferState.pushMessageToBuffer(dimFourMatrixToString(message), MULTI_MATRIX_FORMAT);
     }
 
     /**
@@ -116,10 +82,8 @@ public class Logger {
      * @param message - то, что следует вывести
      */
     public void log(boolean message) {
-        for(int i = 0; i < listBufferStateSwitcher.size(); i++) {
-            listBufferState.set(i,listBufferStateSwitcher.get(i).switchToDefaultState(listBufferState.get(i)));
-            listBufferState.get(i).pushMessageToBuffer(Boolean.toString(message), PRIMITIVE_FORMAT);
-        }
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
+        bufferState.pushMessageToBuffer(Boolean.toString(message), PRIMITIVE_FORMAT);
     }
 
     /**
@@ -132,10 +96,8 @@ public class Logger {
         if(message == null) {
             throw new NullInLogException();
         }
-        for(int i = 0; i < listBufferStateSwitcher.size(); i++) {
-            listBufferState.set(i,listBufferStateSwitcher.get(i).switchToStringState(listBufferState.get(i)));
-            listBufferState.get(i).pushMessageToBuffer(message, STRING_FORMAT);
-        }
+        bufferState = bufferStateSwitcher.switchToStringState(bufferState);
+        bufferState.pushMessageToBuffer(message, STRING_FORMAT);
     }
 
     /**
@@ -154,10 +116,8 @@ public class Logger {
      * @param message -  то, что следует вывести
      */
     public void log(char message) {
-        for(int i = 0; i < listBufferStateSwitcher.size(); i++) {
-            listBufferState.set(i,listBufferStateSwitcher.get(i).switchToDefaultState(listBufferState.get(i)));
-            listBufferState.get(i).pushMessageToBuffer(Character.toString(message), CHAR_FORMAT);
-        }
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
+        bufferState.pushMessageToBuffer(Character.toString(message), CHAR_FORMAT);
     }
     /**
      * Выводит (в консоль по умолчанию) метод toString() объекта,
@@ -168,22 +128,24 @@ public class Logger {
         if(message == null) {
             throw new NullInLogException();
         }
-        for(int i = 0; i < listBufferStateSwitcher.size(); i++) {
-            listBufferState.set(i,listBufferStateSwitcher.get(i).switchToDefaultState(listBufferState.get(i)));
-            listBufferState.get(i).pushMessageToBuffer("" + message, REFERENCE_FORMAT);
-        }
+        bufferState = bufferStateSwitcher.switchToDefaultState(bufferState);
+        bufferState.pushMessageToBuffer(""+message, REFERENCE_FORMAT);
     }
     /**
      * Необходимо вызвать явно по завершению вызовов методов log()
      * для корректного завершения вывода
      */
     public void close() {
-        for(int i = 0; i < listBufferStateSwitcher.size(); i++) {
-            listBufferState.get(i).printBuffer();
-            listBufferPrinter.get(i).close();
-        }
+        bufferState.printBuffer();
     }
 
+    /**
+     * Устанавливает buffer printer, отвечающий за вывод информации(по умолчанию в консоль)
+     * @param - экзмпляр класса, реализующего абстрактный класс BufferPrinter
+     */
+    public void setBufferPrinter(BufferPrinter bp) {
+        bufferStateSwitcher = new BufferStateSwitcher(bp);
+    }
 
 
     /**
