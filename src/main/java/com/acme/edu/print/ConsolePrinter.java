@@ -4,7 +4,7 @@ package com.acme.edu.print;
 import java.util.IllegalFormatException;
 
 /**
- * Реализация абстрактного класса BufferPrinter с выводом в консоль
+ * Реализация интерфейса BufferPrinter с выводом в консоль
  */
 public class ConsolePrinter implements BufferPrinter {
     /**

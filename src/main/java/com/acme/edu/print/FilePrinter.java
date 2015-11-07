@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.IllegalFormatException;
 
 /**
- * Реализация абстрактного класса BufferPrinter с выводом в файл
+ * Реализация интерфейса BufferPrinter с выводом в файл
  */
 public class FilePrinter implements BufferPrinter {
     private File fileName;
@@ -37,13 +37,12 @@ public class FilePrinter implements BufferPrinter {
     }
 
     /**
-     *
+     * Пишет передаваемое сообщение в файл
      * @param buffer - что печатать
      * @param format - шаблон вывода
-     * @throws BufferPrinterException
      */
     @Override
-    public void print(String buffer, String format) {
+    public void print(String buffer, String format) throws BufferPrinterException{
         if(printWriter != null) {
             printWriter.println(String.format(format, buffer));
         }
@@ -69,7 +68,7 @@ public class FilePrinter implements BufferPrinter {
         } catch (UnsupportedEncodingException e) {
             throw new BufferPrinterException("Unsupported Encoding");
         } catch (FileNotFoundException e) {
-            throw new BufferPrinterException("File not found");
+            throw new BufferPrinterException("Wrong format file name");
         }
 
     }

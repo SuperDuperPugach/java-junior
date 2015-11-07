@@ -52,8 +52,12 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
         bufferPrinter.close();
 
         //endregion
-        junitx.framework.FileAssert.assertEquals(new File("expected.txt"), new File("actual.txt"));
         //region then
+        File actual = new File("actual.txt");
+        junitx.framework.FileAssert.assertEquals(new File("expected.txt"), actual);
+        if(actual.exists()) {
+            actual.delete();
+        }
         //endregion
 
     }
