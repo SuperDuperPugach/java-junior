@@ -11,10 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -22,15 +19,23 @@ import static org.mockito.Mockito.when;
 
 public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     private BufferPrinter bufferPrinter;
+    File expected;
     //region given
     @Before
     public void setUpSystemOut() throws IOException {
+        expected = new File("expected.txt");
+        PrintWriter toFile =new PrintWriter( new BufferedWriter(
+                new OutputStreamWriter(
+                        new FileOutputStream(expected, true), "UTF-8")));
+        toFile.println("primitive: 155");
+        toFile.close();
         resetOut();
         captureSysout();
     }
 
     @After
     public void tearDown() {
+        if(expected.exists()) expected.delete();
         resetOut();
     }
     //endregion
