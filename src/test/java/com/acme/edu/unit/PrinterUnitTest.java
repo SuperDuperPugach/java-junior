@@ -16,6 +16,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     private BufferPrinter bufferPrinter;
     //region given
@@ -30,13 +34,12 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
         resetOut();
     }
     //endregion
-
+    //region ConsolePrinter
     @Test
     public void ShouldPrintInConsole() throws BufferPrinterException {
         bufferPrinter = new ConsolePrinter();
         //region when
         bufferPrinter.print("155", "primitive: %s");
-
         //endregion
 
         //region then
@@ -44,9 +47,37 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
         //endregion
     }
 
+    @Test(expected = BufferPrinterException.class)
+    public void shouldCatchExceptionIfWrongFormatinConsolePrinter() throws BufferPrinterException {
+        bufferPrinter = new ConsolePrinter();
+        //region when
+        bufferPrinter.print("d", "%s%s%a");
+        //endregion
+    }
+    //endregion
+
+    //region FilePrinter
     @Test
-    public void ShouldPrintIFile() throws  BufferPrinterException {
+    public void ShouldPrintInFileConstructorWithOneArg() throws  BufferPrinterException {
         bufferPrinter = new FilePrinter("actual.txt");
+        //region when
+        bufferPrinter.print("155", "primitive: %s");
+        bufferPrinter.close();
+
+        //endregion
+        //region then
+        File actual = new File("actual.txt");
+        junitx.framework.FileAssert.assertEquals(new File("expected.txt"), actual);
+        if(actual.exists()) {
+            actual.delete();
+        }
+        //endregion
+
+    }
+
+    @Test
+    public void ShouldPrintInFileConstructorWithTwoArg() throws  BufferPrinterException {
+        bufferPrinter = new FilePrinter("actual.txt", "UTF-8");
         //region when
         bufferPrinter.print("155", "primitive: %s");
         bufferPrinter.close();
@@ -71,4 +102,10 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     public void shouldThrowExceptionWnenWrongEncodingName() throws BufferPrinterException {
         bufferPrinter = new FilePrinter("test", "sdl;fk");
     }
+    //endregion
+
+    //region ServerPrinter
+
+    //endregion
+
 }
