@@ -5,15 +5,14 @@ package com.acme.edu.serv;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Сервер, записывающий принимаемые сообщения в лог файл
  */
 public class FileServer {
     private static final String END_LOG = "END_LOG";
-    private static final String ERROR_LOG = "Can't write logs to file on server!";
+    private static final String WRITE_ERROR = "Can't write logs to file on server!";
     private static final String FILE_NAME = "log.dat";
     private static final int BUFFER_SIZE = 50;
 
@@ -22,7 +21,6 @@ public class FileServer {
     private BufferedReader fromClient;
     private List<String> buffer; //буффер получаемых сообщений
 
-   // private int count; //счетчик вызовов метода принт
     /**
      * Конструктор, принимающий в качестве параметра номер порта. Сервер помещается в
      * режим ожидания соединения с клиентом
@@ -34,7 +32,6 @@ public class FileServer {
         serverSocket = new ServerSocket(port);
         client = serverSocket.accept();
         buffer = new ArrayList<>();
-       // count = 1;
     }
 
     /**
@@ -47,6 +44,8 @@ public class FileServer {
     public void writeToFile() throws IOException {
         fromClient = new BufferedReader(
                 new InputStreamReader(client.getInputStream()));
+        //внутренний класс, необходимый для сортировки List
+
             //ловим ошибку записи логов
         try (BufferedWriter toFile = new BufferedWriter(
                 new FileWriter(FILE_NAME, true))) {
@@ -69,12 +68,22 @@ public class FileServer {
             //пробуем открыть выходной поток
             try (BufferedWriter toClient = new BufferedWriter(
                     new OutputStreamWriter(client.getOutputStream()))) {
-                toClient.write(ERROR_LOG + System.lineSeparator());
+                toClient.write(WRITE_ERROR + System.lineSeparator());
             }
         }
     }
 
     private void writeBufferToFile(BufferedWriter toFile) throws IOException {
+        Collections.sort(buffer, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                boolean contains1 = o1.contains("ERROR");
+                boolean contains2 = o2.contains("ERROR");
+                if (contains1 && !contains2) return -1;
+                if (!contains1 && contains2) return 1;
+                return 0;
+            }
+        });
         for(String s : buffer) {
             toFile.write(s + System.lineSeparator());
         }
