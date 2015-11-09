@@ -58,7 +58,11 @@ public class StringBufferState extends BufferState {
             buffer += " (x" + count + ")";
         }
         for (BufferPrinter bp : bufferPrinter) {
-            if(bp != null) bp.print(buffer, format);
+            try {
+                if (bp != null) bp.print(buffer, format);
+            } finally {
+                continue;
+            }
         }
         this.buffer = null;
         this.count = 0;

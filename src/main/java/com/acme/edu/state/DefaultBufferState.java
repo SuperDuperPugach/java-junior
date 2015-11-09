@@ -48,9 +48,12 @@ public class DefaultBufferState extends BufferState {
     @Override
     public void printBuffer() throws BufferPrinterException {
         for (BufferPrinter bp : bufferPrinter) {
-            bp.print(buffer, format);
+            try {
+                if (bp != null) bp.print(buffer, format);
+            } finally {
+                continue;
+            }
         }
-
         this.buffer = null;
         this.format = null;
     }

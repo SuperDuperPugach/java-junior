@@ -52,7 +52,11 @@ public class IntBufferState extends BufferState {
     @Override
     public void printBuffer() throws BufferPrinterException {
         for (BufferPrinter bp : bufferPrinter) {
-            bp.print(Integer.toString(buffer), format);
+            try {
+                if (bp != null) bp.print(Integer.toString(buffer), format);
+            } finally {
+                continue;
+            }
         }
         this.buffer = 0;
     }

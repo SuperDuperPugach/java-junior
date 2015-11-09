@@ -13,7 +13,6 @@ import java.net.Socket;
  */
 public class ServerPrinter implements BufferPrinter {
     private static final String END = "END_LOG";
-    private int count; //счетчик вызовов метода принт
     private Socket socket;
     private BufferedWriter toServer;
 
@@ -30,9 +29,8 @@ public class ServerPrinter implements BufferPrinter {
             socket = new Socket(InetAddress.getByName(null), port);
             initPrintWriter();
         } catch (IOException e) {
-            throw new BufferPrinterException("can't conncet to server");
+            throw new BufferPrinterException("can't connect to server");
         }
-        count = 1;
     }
 
     /**
@@ -46,8 +44,6 @@ public class ServerPrinter implements BufferPrinter {
         try {
             if (toServer != null) {
                 toServer.write(String.format(format, buffer) + System.lineSeparator());
-                if ((count % 50) == 0) toServer.flush();
-                count++;
             }
         } catch (IOException e) {
             throw new BufferPrinterException("Can't write to server(ServerPrinter)");
