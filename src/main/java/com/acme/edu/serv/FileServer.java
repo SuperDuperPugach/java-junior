@@ -101,9 +101,13 @@ public class FileServer {
         if(serverSocket != null) serverSocket.close();
     }
 
-    public static void main(String[] args) throws IOException {
-        FileServer fileServer = new FileServer(4747);
-        fileServer.writeToFile();
-        fileServer.closeServer();
+    public static void main(String[] args) {
+        try {
+            FileServer fileServer = new FileServer(4747);
+            fileServer.writeToFile();
+            fileServer.closeServer();
+        } catch (IOException e) {
+
+        }
     }
 }

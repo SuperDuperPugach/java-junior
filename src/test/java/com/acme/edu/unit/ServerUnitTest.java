@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ServerUnitTest {
@@ -17,6 +18,10 @@ public class ServerUnitTest {
     public void setUpSystemOut() throws IOException, BufferPrinterException {
         //fileServer = new FileServer(4747);
         //fileServer.accept();
+        Runtime runtime = Runtime.getRuntime();
+        //runtime.exec("touch dina");
+        runtime.exec("java com.acme.edu.serv.FileServer", null, new File("target/classes/"));
+        //runtime.exec("java /target/classes/com.acme.edu.serv.FileServer");
         serverPrinter = new ServerPrinter(4747);
     }
     //проверяет запись логов на сервере(необходим запущенный сервер)
@@ -30,4 +35,5 @@ public class ServerUnitTest {
         serverPrinter.print("true", "primitive: %s");
         serverPrinter.close();
     }
+
 }
