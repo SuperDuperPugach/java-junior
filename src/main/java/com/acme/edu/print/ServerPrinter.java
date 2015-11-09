@@ -14,7 +14,7 @@ import java.net.Socket;
 public class ServerPrinter implements BufferPrinter {
     private int count; //счетчик вызовов метода принт
     private Socket socket;
-    private PrintWriter toServer;
+    private BufferedWriter toServer;
 
     /**
      * Коснтруктор, принимающий в качетсве параметра имя порта сервера
@@ -31,7 +31,7 @@ public class ServerPrinter implements BufferPrinter {
         } catch (IOException e) {
             throw new BufferPrinterException("can't conncet to server");
         }
-        count = 0;
+        count = 1;
     }
 
     /**
@@ -43,24 +43,32 @@ public class ServerPrinter implements BufferPrinter {
     @Override
     public void print(String buffer, String format) throws BufferPrinterException{
         count++;
-        if(toServer != null) {
-            toServer.println(String.format(format, buffer));
+        try {
+            if (toServer != null) {
+                toServer.write(String.format(format, buffer) + System.lineSeparator());
+
+                if ((count % 50) == 0) toServer.flush();
+            }
+        } catch (IOException e) {
+            throw new BufferPrinterException("Can't write to server(ServerPrinter)");
         }
-        if((count % 50) == 0) toServer.flush();
     }
     /**
      * Метод, который закрывает поток отпавления логов на серевер. Необходимо
      * вызвать после окончания вывода логов.
      */
     @Override
-    public void close() {
-        toServer.close();
+    public void close() throws BufferPrinterException {
+        try {
+            if(toServer != null) toServer.close();
+        } catch (IOException e) {
+            throw new BufferPrinterException();
+        }
     }
 
     private void initPrintWriter() throws IOException {
-        toServer = new PrintWriter(
-                new BufferedWriter(
+        toServer = new BufferedWriter(
                         new OutputStreamWriter(
-                                socket.getOutputStream())), false);
+                                socket.getOutputStream()));
     }
 }

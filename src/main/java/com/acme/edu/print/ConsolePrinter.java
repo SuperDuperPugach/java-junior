@@ -1,6 +1,8 @@
 package com.acme.edu.print;
 
 
+import com.acme.edu.except.BufferPrinterException;
+
 import java.util.IllegalFormatException;
 
 /**
@@ -13,8 +15,12 @@ public class ConsolePrinter implements BufferPrinter {
      * @param format - шаблон вывода
      */
     @Override
-    public void print(String buffer, String format){
-        System.out.println(String.format(format, buffer));
+    public void print(String buffer, String format) throws BufferPrinterException {
+        try {
+            System.out.println(String.format(format, buffer));
+        } catch (IllegalFormatException e) {
+            throw new BufferPrinterException("Illegal output format");
+        }
     }
 
     /**

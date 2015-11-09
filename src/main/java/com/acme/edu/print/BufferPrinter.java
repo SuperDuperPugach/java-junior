@@ -17,5 +17,5 @@ public interface BufferPrinter {
     /**
      * Метод окончания записи
      */
-    void close();
+    void close() throws BufferPrinterException;
 }

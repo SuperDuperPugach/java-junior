@@ -162,9 +162,8 @@ public class Logger {
     public void close() throws BufferPrinterException {
         bufferState.printBuffer();
         for (BufferPrinter bp : bufferPrinter) {
-            bp.close();
+            if(bp != null) bp.close();
         }
-
     }
 
     /**

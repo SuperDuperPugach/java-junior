@@ -3,7 +3,6 @@ package com.acme.edu.print;
 import com.acme.edu.except.BufferPrinterException;
 
 import java.io.*;
-import java.util.IllegalFormatException;
 
 /**
  * Реализация интерфейса BufferPrinter с выводом в файл
@@ -11,7 +10,7 @@ import java.util.IllegalFormatException;
 public class FilePrinter implements BufferPrinter {
     private File fileName;
     private String charSet;
-    private PrintWriter printWriter;
+    private BufferedWriter toFile;
 
     /**
      * Конструктор, принимающий в качетсве параметра имя файла, в который
@@ -43,8 +42,12 @@ public class FilePrinter implements BufferPrinter {
      */
     @Override
     public void print(String buffer, String format) throws BufferPrinterException{
-        if(printWriter != null) {
-            printWriter.println(String.format(format, buffer));
+        try {
+            if (toFile != null) {
+                toFile.write(String.format(format, buffer) + System.lineSeparator());
+            }
+        } catch (IOException e) {
+            new BufferPrinterException("Can't write to file (FilePrinter)");
         }
     }
 
@@ -53,22 +56,24 @@ public class FilePrinter implements BufferPrinter {
      * вызвать после окончания вывода логов
      */
     @Override
-    public void close() {
-        if(printWriter != null) {
-            printWriter.close();
+    public void close() throws BufferPrinterException {
+        try {
+            if(toFile != null) toFile.close();
+            } catch (IOException e) {
+            throw new BufferPrinterException("Can't close file(FilePrinter)");
         }
     }
 
     private void initPrintWriter() throws BufferPrinterException {
 
         try {
-            printWriter = new PrintWriter(new BufferedWriter(
+            toFile = new BufferedWriter(
                     new OutputStreamWriter(
-                            new FileOutputStream(fileName,true), charSet)));
+                            new FileOutputStream(fileName,true), charSet));
         } catch (UnsupportedEncodingException e) {
             throw new BufferPrinterException("Unsupported Encoding");
         } catch (FileNotFoundException e) {
-            throw new BufferPrinterException("Wrong format file name");
+            throw new BufferPrinterException("Wrong format file name in FilePrinter object");
         }
 
     }
