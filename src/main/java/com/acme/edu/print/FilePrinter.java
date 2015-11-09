@@ -47,7 +47,7 @@ public class FilePrinter implements BufferPrinter {
                 toFile.write(String.format(format, buffer) + System.lineSeparator());
             }
         } catch (IOException e) {
-            new BufferPrinterException("Can't write to file (FilePrinter)");
+            throw new BufferPrinterException("Can't write to file (FilePrinter)");
         }
     }
 
