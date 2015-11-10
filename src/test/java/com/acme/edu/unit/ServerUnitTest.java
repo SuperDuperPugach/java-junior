@@ -3,37 +3,32 @@ package com.acme.edu.unit;
 
 import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.print.ServerPrinter;
-import com.acme.edu.serv.FileServer;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 public class ServerUnitTest {
-    //private FileServer fileServer;
+    //private LogServer fileServer;
     private ServerPrinter serverPrinter;
+    private ServerPrinter serverPrinter2;
     @Before
     public void setUpSystemOut() throws IOException, BufferPrinterException {
-        //fileServer = new FileServer(4747);
-        //fileServer.accept();
-        Runtime runtime = Runtime.getRuntime();
-        //runtime.exec("touch dina");
-        runtime.exec("java com.acme.edu.serv.FileServer", null, new File("target/classes/"));
-        //runtime.exec("java /target/classes/com.acme.edu.serv.FileServer");
         serverPrinter = new ServerPrinter(4747);
+        serverPrinter2 = new ServerPrinter(4747);
+
     }
-    //проверяет запись логов на сервере(необходим запущенный сервер)
-    @Test @Ignore
+
+    @Test
     public void shouldWriteToFileOnServer() throws BufferPrinterException, IOException {
-        serverPrinter.print("1", "primitive: %s");
-        serverPrinter.print("1", "primitive: %s");
-        serverPrinter.print("1", "primitive: %s");
-        serverPrinter.print("true", "primitive: %s");
-        serverPrinter.print("false", "primitive: %s");
-        serverPrinter.print("true", "primitive: %s");
+        /*for(int i = 0; i < serverPrinters.length; i++) {
+            serverPrinters[i].print(Integer.toString(i), "primitive: %s");
+            serverPrinters[i].close();
+       }*/
+        serverPrinter.print(Integer.toString(16), "primitive: %s");
         serverPrinter.close();
+        serverPrinter2.print(Integer.toString(10), "primitive: %s");
+        serverPrinter2.close();
     }
 
 }

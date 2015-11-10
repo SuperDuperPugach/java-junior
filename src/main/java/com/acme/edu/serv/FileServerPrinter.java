@@ -1,52 +1,41 @@
 package com.acme.edu.serv;
 
 
-
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
-/**
- * Сервер, записывающий принимаемые сообщения в лог файл
- */
-public class FileServer {
+public class FileServerPrinter implements Runnable {
     private static final String END_LOG = "END_LOG";
     private static final String WRITE_ERROR = "Can't write logs to file on server!";
     private static final String FILE_NAME = "log.dat";
     private static final int BUFFER_SIZE = 50;
 
-    private ServerSocket serverSocket;
     private Socket client;
     private BufferedReader fromClient;
     private List<String> buffer; //буффер получаемых сообщений
 
-    /**
-     * Конструктор, принимающий в качестве параметра номер порта. Сервер помещается в
-     * режим ожидания соединения с клиентом
-     * @param port - номер порта
-     * @throws IOException - бросает, если невозможно создать сервер или установить соединение
-     * с клиентом
-     */
-    public FileServer(int port) throws IOException {
-        serverSocket = new ServerSocket(port);
-        client = serverSocket.accept();
-        buffer = new ArrayList<>();
+    public FileServerPrinter(Socket client) {
+        this.client = client;
+        buffer = new LinkedList<>();
     }
 
     /**
-     * Метод, в которм сервер устанавливает потоки соединения с клиентом и производится
+     * Метод, в которм устанавливаются потоки соединения с клиентом и производится
      * запись информации от клинета в файл при накоплении достаточного количества сообщений.
      * При возниконовении ошибки записи в файл
      * клиенту передается оповещение
      * @throws IOException - бросается, если невозможно установить входной или выходной поток с клиентом
      */
-    public void writeToFile() throws IOException {
+    private void writeToFile() throws IOException {
         fromClient = new BufferedReader(
                 new InputStreamReader(client.getInputStream()));
         //внутренний класс, необходимый для сортировки List
 
-            //ловим ошибку записи логов
+        //ловим ошибку записи логов
         try (BufferedWriter toFile = new BufferedWriter(
                 new FileWriter(FILE_NAME, true))) {
             String readline;
@@ -73,6 +62,20 @@ public class FileServer {
         }
     }
 
+    private void close() throws IOException {
+        if(client != null) client.close();
+    }
+
+    @Override
+    public void run() {
+        try {
+            writeToFile();
+            close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void writeBufferToFile(BufferedWriter toFile) throws IOException {
         Collections.sort(buffer, new Comparator<String>() {
             @Override
@@ -89,25 +92,5 @@ public class FileServer {
         }
         toFile.flush();
         buffer.clear();
-    }
-
-
-    /**
-     * Необходимо вызвать для закрытия записи в файл и закрытия сервера
-     * @throws IOException
-     */
-    public void closeServer() throws IOException {
-        if(client != null) client.close(); //так же закрывает входной и выходной потоки
-        if(serverSocket != null) serverSocket.close();
-    }
-
-    public static void main(String[] args) {
-        try {
-            FileServer fileServer = new FileServer(4747);
-            fileServer.writeToFile();
-            fileServer.closeServer();
-        } catch (IOException e) {
-
-        }
     }
 }

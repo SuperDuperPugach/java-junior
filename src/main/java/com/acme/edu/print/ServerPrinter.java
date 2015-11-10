@@ -24,7 +24,6 @@ public class ServerPrinter implements BufferPrinter {
      * @throws BufferPrinterException
      */
     public ServerPrinter(int port) throws  BufferPrinterException {
-        System.out.println("shouldWriteToFileOnServer()");
         try {
             socket = new Socket(InetAddress.getByName(null), port);
             initPrintWriter();
