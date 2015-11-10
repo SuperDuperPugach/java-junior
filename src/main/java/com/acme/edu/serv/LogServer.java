@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,8 +18,8 @@ public class LogServer {
 
     private ServerSocket serverSocket;
     private Socket client;
-    private ExecutorService pool;
-    private ExecutorService poolMain;
+    private ExecutorService poolClient;
+    private ExecutorService poolServer;
     private BufferedWriter toFile;
     /**
      * Конструктор, принимающий в качестве параметра номер порта. Сервер помещается в
@@ -31,8 +30,8 @@ public class LogServer {
      */
     public LogServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        pool = Executors.newFixedThreadPool(5);
-        poolMain = Executors.newFixedThreadPool(2);
+        poolClient = Executors.newFixedThreadPool(5);
+        poolServer = Executors.newFixedThreadPool(2);
         toFile = new BufferedWriter(
                 new FileWriter(FILE_NAME, true));
     }
@@ -42,13 +41,13 @@ public class LogServer {
      * @throws IOException
      */
     public void accept() {
-        poolMain.execute(new Runnable() {
+        poolServer.execute(new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while (true) {
                     try {
                         client = serverSocket.accept();
-                        pool.execute(new FileServerPrinter(client, toFile));
+                        poolClient.execute(new FileServerPrinter(client, toFile));
                     } catch (IOException e) {
                         //TODO решить что делать с ошибкой
                         e.printStackTrace();
@@ -64,7 +63,7 @@ public class LogServer {
      * @throws IOException
      */
     public void closeServer() throws LogServerException {
-        pool.shutdown(); //ждем выполнения всех потоков
+        poolClient.shutdown(); //ждем выполнения всех потоков
         if(toFile != null) {
             try {
                 toFile.close(); //закрываем файл

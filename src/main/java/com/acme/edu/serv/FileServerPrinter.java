@@ -19,8 +19,10 @@ public class FileServerPrinter implements Runnable {
     private List<String> buffer; //буффер получаемых сообщений
 
     /**
-     *
-     * @param client
+     * Конструктор, принимающий в качестве параметра буферный поток записи в файл и
+     * экземпляр соединения с клиентом
+     * @param client - соединение с клиентом
+     * @param bw - буферный поток записи в файл
      */
     public FileServerPrinter(Socket client, BufferedWriter bw) {
         this.client = client;
@@ -29,7 +31,13 @@ public class FileServerPrinter implements Runnable {
     }
 
     /**
+     * Метод, в которм устанавливаются потоки соединения с клиентом и производится
+     * запись информации от клинета в файл при накоплении достаточного количества сообщений.
+     * По окончании записи, закрывается соединение клиента
+     * При возниконовении ошибки записи в файл
+     * клиенту передается оповещение
      *
+     * Данный метод переопределяет метод интерфейса Runnable
      */
     @Override
     public void run() {
@@ -41,17 +49,8 @@ public class FileServerPrinter implements Runnable {
         }
     }
 
-    /**
-     * Метод, в которм устанавливаются потоки соединения с клиентом и производится
-     * запись информации от клинета в файл при накоплении достаточного количества сообщений.
-     * По окончании записи, закрывается соединение клиента
-     * При возниконовении ошибки записи в файл
-     * клиенту передается оповещение
-     *
-     * Данный метод переопределяет метод интерфейса Runnable
-     * @throws IOException - бросается, если невозможно установить входной или выходной поток с клиентом
-     */
-    public void writeToFile() throws LogServerException {
+
+    private void writeToFile() throws LogServerException {
         try {
             fromClient = new BufferedReader(
                     new InputStreamReader(client.getInputStream()));
@@ -88,7 +87,7 @@ public class FileServerPrinter implements Runnable {
         }
     }
 
-    public void close() throws LogServerException {
+    private void close() throws LogServerException {
         try {
             if(client != null) client.close();
         } catch (IOException e) {
