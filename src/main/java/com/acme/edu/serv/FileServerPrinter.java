@@ -11,12 +11,11 @@ import java.util.List;
 public class FileServerPrinter implements Runnable {
     private static final String END_LOG = "END_LOG";
     private static final String WRITE_ERROR = "Can't write logs to file on server!";
-    private static final String FILE_NAME = "log.dat";
     private static final int BUFFER_SIZE = 50;
 
     private Socket client;
     private BufferedReader fromClient;
-    private BufferedWriter toFile;
+    private static BufferedWriter toFile;
     private List<String> buffer; //буффер получаемых сообщений
 
     /**
@@ -30,6 +29,19 @@ public class FileServerPrinter implements Runnable {
     }
 
     /**
+     *
+     */
+    @Override
+    public void run() {
+        try {
+            writeToFile();
+            close();
+        } catch (LogServerException e) {
+            //TODO нельзя здесь пробросить ошибку дальше
+        }
+    }
+
+    /**
      * Метод, в которм устанавливаются потоки соединения с клиентом и производится
      * запись информации от клинета в файл при накоплении достаточного количества сообщений.
      * По окончании записи, закрывается соединение клиента
@@ -39,11 +51,13 @@ public class FileServerPrinter implements Runnable {
      * Данный метод переопределяет метод интерфейса Runnable
      * @throws IOException - бросается, если невозможно установить входной или выходной поток с клиентом
      */
-    public void writeToFile() throws IOException {
-        fromClient = new BufferedReader(
-                new InputStreamReader(client.getInputStream()));
-        //внутренний класс, необходимый для сортировки List
-
+    public void writeToFile() throws LogServerException {
+        try {
+            fromClient = new BufferedReader(
+                    new InputStreamReader(client.getInputStream()));
+        } catch (IOException e) {
+            throw new LogServerException("Can't connect to client");
+        }
         //ловим ошибку записи логов
         try {
             String readline;
@@ -55,36 +69,35 @@ public class FileServerPrinter implements Runnable {
                     writeBufferToFile(toFile);
                     break;
                 }
+
                 buffer.add(readline);
+
                 if(buffer.size() == BUFFER_SIZE) {
                     writeBufferToFile(toFile);
                 }
             }
         } catch (IOException e) {
-            //здесь нужно передать клиенту сообщение об ошибке записи логов в файл
-            //пробуем открыть выходной поток
+
+            //пробуем открыть выходной поток для оповещение клиента об ошибке
             try (BufferedWriter toClient = new BufferedWriter(
                     new OutputStreamWriter(client.getOutputStream()))) {
                 toClient.write(WRITE_ERROR + System.lineSeparator());
+            } catch (IOException e1) {
+                throw new LogServerException("Can't connect to client");
             }
         }
     }
 
-    public void close() throws IOException {
-        if(client != null) client.close();
-    }
-
-    @Override
-    public void run() {
+    public void close() throws LogServerException {
         try {
-            writeToFile();
-            close();
+            if(client != null) client.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new LogServerException("Can't close client connection");
         }
     }
 
-    private void writeBufferToFile(BufferedWriter toFile) throws IOException {
+    //сортирует буффер по ворнингам и пишет его в файл.
+    private void writeBufferToFile(BufferedWriter toFile) {
         Collections.sort(buffer, new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
@@ -95,10 +108,22 @@ public class FileServerPrinter implements Runnable {
                 return 0;
             }
         });
-        for(String s : buffer) {
-            toFile.write(s + System.lineSeparator());
+        synchronized (toFile){
+            for (String s : buffer) {
+                try {
+                    toFile.write(s + System.lineSeparator());
+                } catch (IOException e) {
+                    System.out.println("dima6");
+                    e.printStackTrace();
+                }
+            }
+            try {
+                toFile.flush();
+            } catch (IOException e) {
+                System.out.println("dima7");
+                e.printStackTrace();
+            }
         }
-        toFile.flush();
         buffer.clear();
     }
 }

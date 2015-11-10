@@ -57,6 +57,7 @@ public class ServerPrinter implements BufferPrinter {
         try {
             if(toServer != null)  {
                 toServer.write(END);
+                toServer.flush();
                 toServer.close();
             }
         } catch (IOException e) {
