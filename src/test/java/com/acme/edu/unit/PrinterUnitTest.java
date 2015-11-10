@@ -69,14 +69,14 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     //region FilePrinter
     @Test
     public void ShouldPrintInFileConstructorWithOneArg() throws  BufferPrinterException {
-        bufferPrinter = new FilePrinter("actual.txt", "UTF-8");
+        bufferPrinter = new FilePrinter("actual1.txt", "UTF-8");
         //region when
         bufferPrinter.print("155", "primitive: %s");
         bufferPrinter.close();
 
         //endregion
         //region then
-        File actual = new File("actual.txt");
+        File actual = new File("actual1.txt");
         junitx.framework.FileAssert.assertEquals(expected, actual);
         if(actual.exists()) {
             actual.delete();
@@ -87,14 +87,14 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
 
     @Test
     public void ShouldPrintInFileConstructorWithTwoArg() throws  BufferPrinterException {
-        bufferPrinter = new FilePrinter("actual.txt", "UTF-8");
+        bufferPrinter = new FilePrinter("actual2.txt", "UTF-8");
         //region when
         bufferPrinter.print("155", "primitive: %s");
         bufferPrinter.close();
 
         //endregion
         //region then
-        File actual = new File("actual.txt");
+        File actual = new File("actual2.txt");
         junitx.framework.FileAssert.assertEquals(expected, actual);
         if(actual.exists()) {
             actual.delete();
