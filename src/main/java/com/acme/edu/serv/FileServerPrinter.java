@@ -16,25 +16,36 @@ public class FileServerPrinter implements Runnable {
 
     private Socket client;
     private BufferedReader fromClient;
+    private BufferedWriter toFile;
     private List<String> buffer; //буффер получаемых сообщений
 
     /**
      *
      * @param client
      */
-    public FileServerPrinter(Socket client) {
+    public FileServerPrinter(Socket client, BufferedWriter bw) {
         this.client = client;
+        this.toFile = bw;
         buffer = new LinkedList<>();
     }
 
-    private void writeToFile() throws IOException {
+    /**
+     * Метод, в которм устанавливаются потоки соединения с клиентом и производится
+     * запись информации от клинета в файл при накоплении достаточного количества сообщений.
+     * По окончании записи, закрывается соединение клиента
+     * При возниконовении ошибки записи в файл
+     * клиенту передается оповещение
+     *
+     * Данный метод переопределяет метод интерфейса Runnable
+     * @throws IOException - бросается, если невозможно установить входной или выходной поток с клиентом
+     */
+    public void writeToFile() throws IOException {
         fromClient = new BufferedReader(
                 new InputStreamReader(client.getInputStream()));
         //внутренний класс, необходимый для сортировки List
 
         //ловим ошибку записи логов
-        try (BufferedWriter toFile = new BufferedWriter(
-                new FileWriter(FILE_NAME, true))) {
+        try {
             String readline;
             //бесконечный цикл, выход из которого осуществляется приемом от клиента
             // сообщения о выходе
@@ -59,21 +70,10 @@ public class FileServerPrinter implements Runnable {
         }
     }
 
-    private void close() throws IOException {
+    public void close() throws IOException {
         if(client != null) client.close();
     }
 
-    /**
-     * /**
-     * Метод, в которм устанавливаются потоки соединения с клиентом и производится
-     * запись информации от клинета в файл при накоплении достаточного количества сообщений.
-     * По окончании записи, закрывается соединение клиента
-     * При возниконовении ошибки записи в файл
-     * клиенту передается оповещение
-     *
-     * Данный метод переопределяет метод интерфейса Runnable
-     * @throws IOException - бросается, если невозможно установить входной или выходной поток с клиентом
-     */
     @Override
     public void run() {
         try {

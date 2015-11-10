@@ -16,8 +16,6 @@ import java.util.UUID;
 public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     private BufferPrinter bufferPrinter;
     private File expected;
-    private File actual1;
-    private File actual2;
     //region given
     @Before
     public void setUpSystemOut() throws IOException {
@@ -36,6 +34,7 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
         resetOut();
     }
     //endregion
+
     //region ConsolePrinter
     @Test
     public void ShouldPrintInConsole() throws BufferPrinterException {
@@ -61,18 +60,18 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     //region FilePrinter
     @Test
     public void ShouldPrintInFileConstructorWithOneArg() throws  BufferPrinterException {
-        String filename1 = UUID.randomUUID().toString();
-        actual1 = new File(filename1);
-        bufferPrinter = new FilePrinter(filename1);
+        String filename = UUID.randomUUID().toString();
+        File actual = new File(filename);
+        bufferPrinter = new FilePrinter(filename);
         //region when
         bufferPrinter.print("155", "primitive: %s");
         bufferPrinter.close();
 
         //endregion
         //region then
-        junitx.framework.FileAssert.assertEquals(expected, actual1);
-        if(actual1.exists()) {
-            actual1.delete();
+        junitx.framework.FileAssert.assertEquals(expected, actual);
+        if(actual.exists()) {
+            actual.delete();
         }
         //endregion
 
@@ -80,9 +79,9 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
 
     @Test
     public void ShouldPrintInFileConstructorWithTwoArg() throws  BufferPrinterException {
-        String filename2 = UUID.randomUUID().toString();
-        actual2 = new File(filename2);
-        bufferPrinter = new FilePrinter(filename2, "UTF-8");
+        String filename = UUID.randomUUID().toString();
+        File actual = new File(filename);
+        bufferPrinter = new FilePrinter(filename, "UTF-8");
 
         //region when
         bufferPrinter.print("155", "primitive: %s");
@@ -90,9 +89,9 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
         //endregion
 
         //region then
-        junitx.framework.FileAssert.assertEquals(expected, actual2);
-        if(actual2.exists()) {
-            actual2.delete();
+        junitx.framework.FileAssert.assertEquals(expected, actual);
+        if(actual.exists()) {
+            actual.delete();
         }
         //endregion
 
@@ -100,13 +99,24 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
 
     @Test(expected = BufferPrinterException.class)
     public void shouldCatchExceptionIfNullObject() throws BufferPrinterException {
+        String filename = "";
+        File actual = new File(filename);
         bufferPrinter = new FilePrinter("");
+        if(actual.exists()) {
+            actual.delete();
+        }
     }
 
     @Test(expected = BufferPrinterException.class)
     public void shouldThrowExceptionWnenWrongEncodingName() throws BufferPrinterException {
-        bufferPrinter = new FilePrinter("test", "sdl;fk");
+        String filename = UUID.randomUUID().toString();
+        File actual = new File(filename);
+        bufferPrinter = new FilePrinter(filename, "sdl;fk");
+        if(actual.exists()) {
+            actual.delete();
+        }
     }
+
     //endregion
 
     //region ServerPrinter
