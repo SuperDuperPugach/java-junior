@@ -6,16 +6,11 @@ import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.print.BufferPrinter;
 import com.acme.edu.print.ConsolePrinter;
 import com.acme.edu.print.FilePrinter;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     private BufferPrinter bufferPrinter;
@@ -64,7 +59,7 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     //region FilePrinter
     @Test
     public void ShouldPrintInFileConstructorWithOneArg() throws  BufferPrinterException {
-        bufferPrinter = new FilePrinter("actual.txt");
+        bufferPrinter = new FilePrinter("actual.txt", "UTF-8");
         //region when
         bufferPrinter.print("155", "primitive: %s");
         bufferPrinter.close();
