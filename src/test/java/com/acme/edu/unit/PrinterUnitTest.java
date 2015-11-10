@@ -18,12 +18,22 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     //region given
     @Before
     public void setUpSystemOut() throws IOException {
-        expected = new File("expected.txt");
+       /* expected = new File("expected.txt");
+
         PrintWriter toFile =new PrintWriter( new BufferedWriter(
                 new OutputStreamWriter(
-                        new FileOutputStream(expected, true), "UTF-8")));
+                        new FileOutputStream(expected), "UTF-8")));
         toFile.println("primitive: 155");
+        toFile.flush();
         toFile.close();
+        System.out.println(expected.getAbsolutePath());*/
+
+        PrintWriter writer = new PrintWriter("expected.txt", "UTF-8");
+        writer.println("primitive: 155");
+        writer.close();
+
+        expected = new File("expected.txt");
+
         resetOut();
         captureSysout();
     }
@@ -67,7 +77,7 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
         //endregion
         //region then
         File actual = new File("actual.txt");
-        junitx.framework.FileAssert.assertEquals(new File("expected.txt"), actual);
+        junitx.framework.FileAssert.assertEquals(expected, actual);
         if(actual.exists()) {
             actual.delete();
         }
@@ -85,7 +95,7 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
         //endregion
         //region then
         File actual = new File("actual.txt");
-        junitx.framework.FileAssert.assertEquals(new File("expected.txt"), actual);
+        junitx.framework.FileAssert.assertEquals(expected, actual);
         if(actual.exists()) {
             actual.delete();
         }
