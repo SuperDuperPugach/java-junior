@@ -18,18 +18,15 @@ public class FileServerPrinter implements Runnable {
     private BufferedReader fromClient;
     private List<String> buffer; //буффер получаемых сообщений
 
+    /**
+     *
+     * @param client
+     */
     public FileServerPrinter(Socket client) {
         this.client = client;
         buffer = new LinkedList<>();
     }
 
-    /**
-     * Метод, в которм устанавливаются потоки соединения с клиентом и производится
-     * запись информации от клинета в файл при накоплении достаточного количества сообщений.
-     * При возниконовении ошибки записи в файл
-     * клиенту передается оповещение
-     * @throws IOException - бросается, если невозможно установить входной или выходной поток с клиентом
-     */
     private void writeToFile() throws IOException {
         fromClient = new BufferedReader(
                 new InputStreamReader(client.getInputStream()));
@@ -66,6 +63,17 @@ public class FileServerPrinter implements Runnable {
         if(client != null) client.close();
     }
 
+    /**
+     * /**
+     * Метод, в которм устанавливаются потоки соединения с клиентом и производится
+     * запись информации от клинета в файл при накоплении достаточного количества сообщений.
+     * По окончании записи, закрывается соединение клиента
+     * При возниконовении ошибки записи в файл
+     * клиенту передается оповещение
+     *
+     * Данный метод переопределяет метод интерфейса Runnable
+     * @throws IOException - бросается, если невозможно установить входной или выходной поток с клиентом
+     */
     @Override
     public void run() {
         try {

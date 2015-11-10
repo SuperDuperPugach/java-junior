@@ -41,7 +41,7 @@ public class LogServer {
 
 
     /**
-     * Необходимо вызвать для закрытия записи в файл и закрытия сервера
+     * Необходимо вызвать для закрытия закрытия сервера
      * @throws IOException
      */
     public void closeServer() throws IOException {
