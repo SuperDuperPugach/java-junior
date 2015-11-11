@@ -49,8 +49,8 @@ public class LogServer {
                         client = serverSocket.accept();
                         poolClient.execute(new FileServerPrinter(client, toFile));
                     } catch (IOException e) {
-                        //TODO решить что делать с ошибкой
-                        e.printStackTrace();
+                        //возникает, при закрытии сервера. просто выходим из метода
+                        return;
                     }
                 }
             }

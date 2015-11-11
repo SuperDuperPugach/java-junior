@@ -61,12 +61,12 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     @Test
     public void ShouldPrintInFileConstructorWithOneArg() throws  BufferPrinterException {
         String filename = UUID.randomUUID().toString();
-        File actual = new File(filename);
         bufferPrinter = new FilePrinter(filename);
         //region when
         bufferPrinter.print("155", "primitive: %s");
         bufferPrinter.close();
 
+        File actual = new File(filename);
         //endregion
         //region then
         junitx.framework.FileAssert.assertEquals(expected, actual);
@@ -80,13 +80,13 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     @Test
     public void ShouldPrintInFileConstructorWithTwoArg() throws  BufferPrinterException {
         String filename = UUID.randomUUID().toString();
-        File actual = new File(filename);
         bufferPrinter = new FilePrinter(filename, "UTF-8");
 
         //region when
         bufferPrinter.print("155", "primitive: %s");
         bufferPrinter.close();
         //endregion
+        File actual = new File(filename);
 
         //region then
         junitx.framework.FileAssert.assertEquals(expected, actual);
@@ -110,8 +110,8 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     @Test(expected = BufferPrinterException.class)
     public void shouldThrowExceptionWnenWrongEncodingName() throws BufferPrinterException {
         String filename = UUID.randomUUID().toString();
-        File actual = new File(filename);
         bufferPrinter = new FilePrinter(filename, "sdl;fk");
+        File actual = new File(filename);
         if(actual.exists()) {
             actual.delete();
         }
