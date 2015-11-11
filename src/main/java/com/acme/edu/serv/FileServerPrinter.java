@@ -58,31 +58,24 @@ public class FileServerPrinter implements Runnable {
             throw new LogServerException("Can't connect to client");
         }
         //ловим ошибку записи логов
-        try {
-            String readline;
-            //бесконечный цикл, выход из которого осуществляется приемом от клиента
-            // сообщения о выходе
-            while (true) {
+
+        String readline;
+        //бесконечный цикл, выход из которого осуществляется приемом от клиента
+        // сообщения о выходе
+        while (true) {
+            try {
                 readline = fromClient.readLine();
                 if (readline.equals(END_LOG)) {
                     writeBufferToFile(toFile);
                     break;
                 }
-
                 buffer.add(readline);
-
-                if(buffer.size() == BUFFER_SIZE) {
-                    writeBufferToFile(toFile);
-                }
+            } catch (IOException e) {
+                throw new LogServerException("Can't readline from client");
             }
-        } catch (IOException e) {
 
-            //пробуем открыть выходной поток для оповещение клиента об ошибке
-            try (BufferedWriter toClient = new BufferedWriter(
-                    new OutputStreamWriter(client.getOutputStream()))) {
-                toClient.write(WRITE_ERROR + System.lineSeparator());
-            } catch (IOException e1) {
-                throw new LogServerException("Can't connect to client");
+            if(buffer.size() == BUFFER_SIZE) {
+                writeBufferToFile(toFile);
             }
         }
     }
@@ -96,7 +89,7 @@ public class FileServerPrinter implements Runnable {
     }
 
     //сортирует буффер по ворнингам и пишет его в файл.
-    private void writeBufferToFile(BufferedWriter toFile) {
+    private void writeBufferToFile(BufferedWriter toFile) throws LogServerException {
         Collections.sort(buffer, new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
@@ -111,16 +104,16 @@ public class FileServerPrinter implements Runnable {
             for (String s : buffer) {
                 try {
                     toFile.write(s + System.lineSeparator());
+                    toFile.flush();
                 } catch (IOException e) {
-                    System.out.println("dima6");
-                    e.printStackTrace();
+                    //пытаемся передать сообщение клиенту
+                    try (BufferedWriter toClient = new BufferedWriter(
+                            new OutputStreamWriter(client.getOutputStream()))) {
+                        toClient.write(WRITE_ERROR + System.lineSeparator());
+                    } catch (IOException e1) {
+                        throw new LogServerException("Can't write output to client");
+                    }
                 }
-            }
-            try {
-                toFile.flush();
-            } catch (IOException e) {
-                System.out.println("dima7");
-                e.printStackTrace();
             }
         }
         buffer.clear();
