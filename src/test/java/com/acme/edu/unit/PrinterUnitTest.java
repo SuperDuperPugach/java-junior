@@ -6,6 +6,9 @@ import com.acme.edu.except.BufferPrinterException;
 import com.acme.edu.print.BufferPrinter;
 import com.acme.edu.print.ConsolePrinter;
 import com.acme.edu.print.FilePrinter;
+import com.acme.edu.print.ServerPrinter;
+import com.acme.edu.serv.LogServer;
+import com.acme.edu.serv.LogServerException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,7 +97,6 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
             actual.delete();
         }
         //endregion
-
     }
 
     @Test(expected = BufferPrinterException.class)
@@ -120,7 +122,20 @@ public class PrinterUnitTest implements SysoutCaptureAndAssertionAbility {
     //endregion
 
     //region ServerPrinter
+    @Test(expected = BufferPrinterException.class)
+    public void shouldThrowExceptionWnenCantConnectToServer() throws BufferPrinterException {
+        bufferPrinter = new ServerPrinter(4747);
 
+    }
+    @Test(expected = BufferPrinterException.class)
+    public void shouldThrowExceptionWnenCantPrintToServer() throws BufferPrinterException, LogServerException {
+        LogServer server = new LogServer(4747);
+        bufferPrinter = new ServerPrinter(4747);
+        server.closeServer();
+        bufferPrinter.print("6","prirmitive: %s");
+        bufferPrinter.close();
+
+    }
     //endregion
 
 }

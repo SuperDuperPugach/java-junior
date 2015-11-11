@@ -28,12 +28,20 @@ public class LogServer {
      * @throws IOException - бросает, если невозможно создать сервер или установить соединение
      * с клиентом
      */
-    public LogServer(int port) throws IOException {
-        serverSocket = new ServerSocket(port);
+    public LogServer(int port) throws LogServerException {
+        try {
+            serverSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            throw new LogServerException("can't create server");
+        }
         poolClient = Executors.newFixedThreadPool(5);
         poolServer = Executors.newFixedThreadPool(2);
-        toFile = new BufferedWriter(
-                new FileWriter(FILE_NAME, true));
+        try {
+            toFile = new BufferedWriter(
+                    new FileWriter(FILE_NAME, true));
+        } catch (IOException e) {
+            throw new LogServerException("can't create file stream");
+        }
     }
 
     /**

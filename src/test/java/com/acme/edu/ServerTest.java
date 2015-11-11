@@ -21,7 +21,7 @@ public class ServerTest {
     private File actual;
     private File expected;
     @Before
-    public void setUpSystemOut() throws IOException, BufferPrinterException {
+    public void setUpSystemOut() throws BufferPrinterException, LogServerException {
         server = new LogServer(4747);
         server.accept();
         serverPrinter = new ServerPrinter(4747);
